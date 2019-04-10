@@ -10,23 +10,29 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class StarEscape extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	TextureRegion[] region = new TextureRegion[16];
-	Animation backgroundAnimation;
-	TextureRegion background;
 
-	float stateTime;
+	private static final int COUNT_SHOT = 16;
+	private static final int STEP_NEXT_SHOT_WIDTH = 400;
+	private static final int SHOT_WIDTH = 400;
+	private static final int SHOT_HEIGHT = 500;
+
+
+	private SpriteBatch batch;
+	private Texture img;
+	private TextureRegion[] region = new TextureRegion[COUNT_SHOT];
+	private Animation backgroundAnimation;
+	private TextureRegion background;
+
+	private float stateTime;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("CosmoAnim.png");
-		for (int i = 0; i < 16; i++) {
-			region[i] = new TextureRegion(img, (i * 800), 0, 268, 500);
+		img = new Texture("cosmos.png");
+		for (int i = 0; i < COUNT_SHOT; i++) {
+			region[i] = new TextureRegion(img, (i * STEP_NEXT_SHOT_WIDTH), 0, SHOT_WIDTH, SHOT_HEIGHT);
 		}
 		backgroundAnimation = new Animation(0.033f, region);
-		/*region = new TextureRegion(img, 0, 0, 268, 500);*/
 	}
 
 	@Override
