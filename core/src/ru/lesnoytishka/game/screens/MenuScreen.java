@@ -15,11 +15,11 @@ public class MenuScreen extends BaseScreen {
     private static final int SHOT_WIDTH = 400;
     private static final int SHOT_HEIGHT = 500;
 
-    private static final int SHIP_WIDTH = 70;
-    private static final int SHIP_HEIGHT = 70;
-    private float shipWidth = SHIP_WIDTH / (float) 2;
-    private float shipHeight = SHIP_HEIGHT / (float) 2;
-    private float shipSpeed = 10;
+    private static final float SHIP_WIDTH = 70;
+    private static final float SHIP_HEIGHT = 70;
+    private static final float SHIP_CENTER_WIDTH = SHIP_WIDTH / (float) 2;
+    private static final float SHIP_CENTER_HEIGHT = SHIP_HEIGHT / (float) 2;
+    private float shipSpeed = 3;
 
     private Texture img;
     private Texture ship;
@@ -75,20 +75,19 @@ public class MenuScreen extends BaseScreen {
         move();
         TextureRegion background = (TextureRegion) backgroundAnimation.getKeyFrame(stateTime, true);
 
+        distanceToTouch.set(touch);
         if (isWeHaveOrder) {
-            distanceToTouch.set(touch);
             if (distanceToTouch.sub(pos).len() > shipSpeed){
                 pos.add(moveToTouch);
             } else {
                 pos.set(touch);
+                isWeHaveOrder = false;
             }
         }
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(heroShip, pos.x - shipWidth, pos.y - shipHeight, shipWidth, shipHeight, SHIP_WIDTH, SHIP_HEIGHT, 1,1, angle);
+        batch.draw(heroShip, pos.x - SHIP_CENTER_WIDTH, pos.y - SHIP_CENTER_HEIGHT, SHIP_CENTER_WIDTH, SHIP_CENTER_HEIGHT, SHIP_WIDTH, SHIP_HEIGHT, 1,1, angle);
         batch.end();
-        rotateAngle = (float) Math.atan2(touch.y - pos.y, touch.x - pos.x);
-        angle = (float) Math.toDegrees(rotateAngle - 89);
     }
 
     @Override
@@ -174,6 +173,8 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
+        rotateAngle = (float) Math.atan2(touch.y - pos.y, touch.x - pos.x);
+        angle = ((float) Math.toDegrees(rotateAngle))-90;
         moveToTouch.set(touch.cpy().sub(pos)).setLength(shipSpeed);
         isWeHaveOrder = true;
         return false;
@@ -182,6 +183,8 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
+        rotateAngle = (float) Math.atan2(touch.y - pos.y, touch.x - pos.x);
+        angle = ((float) Math.toDegrees(rotateAngle)) - 90;
         moveToTouch.set(touch.cpy().sub(pos)).setLength(shipSpeed);
         isWeHaveOrder = true;
         return false;
