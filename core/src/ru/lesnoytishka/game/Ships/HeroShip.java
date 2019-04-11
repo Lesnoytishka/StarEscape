@@ -10,5 +10,7 @@ public class HeroShip extends BaseShip {
 
     HeroShip(){
         hp = 200;
+        speed = 5f;
     }
+
 }
