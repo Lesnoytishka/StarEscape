@@ -19,7 +19,7 @@ public class MenuScreen extends BaseScreen {
     private static final float SHIP_HEIGHT = 70;
     private static final float SHIP_CENTER_WIDTH = SHIP_WIDTH / (float) 2;
     private static final float SHIP_CENTER_HEIGHT = SHIP_HEIGHT / (float) 2;
-    private float shipSpeed = 3;
+    private float shipSpeed = 5;
 
     private Texture img;
     private Texture ship;
@@ -75,10 +75,13 @@ public class MenuScreen extends BaseScreen {
         move();
         TextureRegion background = (TextureRegion) backgroundAnimation.getKeyFrame(stateTime, true);
 
+
         distanceToTouch.set(touch);
         if (isWeHaveOrder) {
             if (distanceToTouch.sub(pos).len() > shipSpeed){
                 pos.add(moveToTouch);
+                rotateAngle = (float) Math.atan2(touch.y - pos.y, touch.x - pos.x);
+                angle = ((float) Math.toDegrees(rotateAngle)) - 90;
             } else {
                 pos.set(touch);
                 isWeHaveOrder = false;
@@ -173,8 +176,6 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
-        rotateAngle = (float) Math.atan2(touch.y - pos.y, touch.x - pos.x);
-        angle = ((float) Math.toDegrees(rotateAngle))-90;
         moveToTouch.set(touch.cpy().sub(pos)).setLength(shipSpeed);
         isWeHaveOrder = true;
         return false;
@@ -183,8 +184,6 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
-        rotateAngle = (float) Math.atan2(touch.y - pos.y, touch.x - pos.x);
-        angle = ((float) Math.toDegrees(rotateAngle)) - 90;
         moveToTouch.set(touch.cpy().sub(pos)).setLength(shipSpeed);
         isWeHaveOrder = true;
         return false;
