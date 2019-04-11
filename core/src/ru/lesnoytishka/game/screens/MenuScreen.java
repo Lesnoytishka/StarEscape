@@ -17,7 +17,9 @@ public class MenuScreen extends BaseScreen {
 
     private static final int SHIP_WIDTH = 70;
     private static final int SHIP_HEIGHT = 70;
-    private float shipSpeed = 4;
+    private float shipWidth = SHIP_WIDTH / (float) 2;
+    private float shipHeight = SHIP_HEIGHT / (float) 2;
+    private float shipSpeed = 10;
 
     private Texture img;
     private Texture ship;
@@ -27,6 +29,8 @@ public class MenuScreen extends BaseScreen {
 
     private Vector2 pos;
     private Vector2 touch;
+    private Vector2 moveToTouch;
+    private Vector2 distanceToTouch;
 
     private boolean isWeHaveOrder;
     private boolean isMoveUp;
@@ -36,21 +40,32 @@ public class MenuScreen extends BaseScreen {
 
     private float stateTime;
     private float angle;
+    private float rotateAngle;
+
 
     @Override
     public void show() {
         super.show();
-        img = new Texture("cosmos.png");
+//        HeroShip myHeroShip = new HeroShip();
+//        heroShip = myHeroShip.heroShip;
+
         ship = new Texture("heroShip.png");
         heroShip = new TextureRegion(ship, 0, 0, 237, 290);
 
+        animBackground();
+
+        pos = new Vector2(100f, 100f);
+        touch = new Vector2();
+        moveToTouch = new Vector2(shipSpeed, shipSpeed);
+        distanceToTouch = new Vector2();
+    }
+
+    private void animBackground() {
+        img = new Texture("cosmos.png");
         for (int i = 0; i < COUNT_SHOT; i++) {
             region[i] = new TextureRegion(img, (STEP_NEXT_SHOT_WIDTH * i), 0, SHOT_WIDTH, SHOT_HEIGHT);
         }
         backgroundAnimation = new Animation(0.033f, region);
-
-        pos = new Vector2(100f, 100f);
-        touch = new Vector2();
     }
 
     @Override
@@ -60,20 +75,20 @@ public class MenuScreen extends BaseScreen {
         move();
         TextureRegion background = (TextureRegion) backgroundAnimation.getKeyFrame(stateTime, true);
 
+        if (isWeHaveOrder) {
+            distanceToTouch.set(touch);
+            if (distanceToTouch.sub(pos).len() > shipSpeed){
+                pos.add(moveToTouch);
+            } else {
+                pos.set(touch);
+            }
+        }
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(heroShip, pos.x, pos.y, (SHIP_WIDTH / 2.0f), (SHIP_HEIGHT / 2.0f), SHIP_WIDTH, SHIP_HEIGHT, 1,1, angle);
-
-        if (isWeHaveOrder) {
-            float positionX = pos.x + (SHIP_WIDTH / 2.0f);
-            float positionY = pos.y + (SHIP_HEIGHT / 2.0f);
-            Vector2 moveToVector = new Vector2(touch.x - positionX, touch.y - positionY);
-            float lengthMovingDist = (float) Math.sqrt( (Math.pow(moveToVector.x, 2) + Math.pow(moveToVector.y, 2)) );
-            Vector2 normalityMove = new Vector2(moveToVector.x / lengthMovingDist, moveToVector.y / lengthMovingDist);
-            touchedDownMove(positionX, positionY, normalityMove);
-        }
-
+        batch.draw(heroShip, pos.x - shipWidth, pos.y - shipHeight, shipWidth, shipHeight, SHIP_WIDTH, SHIP_HEIGHT, 1,1, angle);
         batch.end();
+        rotateAngle = (float) Math.atan2(touch.y - pos.y, touch.x - pos.x);
+        angle = (float) Math.toDegrees(rotateAngle - 89);
     }
 
     @Override
@@ -103,7 +118,6 @@ public class MenuScreen extends BaseScreen {
                 isMoveRight = true;
                 break;
         }
-
         return false;
     }
 
@@ -160,36 +174,15 @@ public class MenuScreen extends BaseScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
+        moveToTouch.set(touch.cpy().sub(pos)).setLength(shipSpeed);
         isWeHaveOrder = true;
         return false;
-    }
-
-    private void touchedDownMove(float positionX, float positionY, Vector2 normalityMove){
-        float shipSpeed = 7f;
-        float spread = 1f + shipSpeed;
-        boolean shipIntoTouchedPosition = (((pos.x + (SHIP_WIDTH / 2.0f)) > (touch.x - spread)) && ((pos.x + (SHIP_WIDTH / 2.0f)) < (touch.x + spread))) &&
-                (((pos.y + (SHIP_HEIGHT / 2.0f)) > (touch.y - spread)) && ((pos.y + (SHIP_HEIGHT / 2.0f)) < (touch.y + spread)));
-
-
-
-        if (positionX < touch.x) {
-            pos.x += ( shipSpeed * normalityMove.x);
-        } else if (positionX > touch.x) {
-            pos.x -= ( shipSpeed * Math.abs(normalityMove.x));
-        }
-
-        if (positionY < touch.y) {
-            pos.y += ( shipSpeed * normalityMove.y);
-        } else if (positionY > touch.y) {
-            pos.y -= ( shipSpeed * Math.abs(normalityMove.y));
-        }
-
-        isWeHaveOrder = !shipIntoTouchedPosition;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
+        moveToTouch.set(touch.cpy().sub(pos)).setLength(shipSpeed);
         isWeHaveOrder = true;
         return false;
     }
