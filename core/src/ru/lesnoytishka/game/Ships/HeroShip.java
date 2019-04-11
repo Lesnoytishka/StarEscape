@@ -7,16 +7,12 @@ import ru.lesnoytishka.game.Base.BaseShip;
 
 public class HeroShip extends BaseShip {
 
-    private Texture ship = new Texture("heroesShip");
-    public TextureRegion heroShip;
-
     public HeroShip(){
         hp = 200;
-        speed = 5f;
+        speed = 7f;
 
-        ship = new Texture("heroShip.png");
-        heroShip = new TextureRegion(ship, 0, 0, 237, 290);
+        shipTexture = new Texture("heroShip.png");
+        heroShip = new TextureRegion(shipTexture, 0, 0, 237, 290);
 
     }
-
 }

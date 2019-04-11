@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.Base.BaseScreen;
+import ru.lesnoytishka.game.Ships.HeroShip;
 
 public class MenuScreen extends BaseScreen {
 
@@ -19,12 +20,10 @@ public class MenuScreen extends BaseScreen {
     private static final float SHIP_HEIGHT = 70;
     private static final float SHIP_CENTER_WIDTH = SHIP_WIDTH / (float) 2;
     private static final float SHIP_CENTER_HEIGHT = SHIP_HEIGHT / (float) 2;
-    private float shipSpeed = 5;
 
     private Texture img;
-    private Texture ship;
-    private TextureRegion heroShip;
     private TextureRegion[] region = new TextureRegion[COUNT_SHOT];
+    private TextureRegion heroShip;
     private Animation backgroundAnimation;
 
     private Vector2 pos;
@@ -41,16 +40,15 @@ public class MenuScreen extends BaseScreen {
     private float stateTime;
     private float angle;
     private float rotateAngle;
-
+    private float shipSpeed;
+    private HeroShip myHeroShip;
 
     @Override
     public void show() {
         super.show();
-//        HeroShip myHeroShip = new HeroShip();
-//        heroShip = myHeroShip.heroShip;
-
-        ship = new Texture("heroShip.png");
-        heroShip = new TextureRegion(ship, 0, 0, 237, 290);
+        myHeroShip = new HeroShip();
+        heroShip = myHeroShip.getHeroShip();
+        shipSpeed = myHeroShip.getSpeed();
 
         animBackground();
 
@@ -75,7 +73,6 @@ public class MenuScreen extends BaseScreen {
         move();
         TextureRegion background = (TextureRegion) backgroundAnimation.getKeyFrame(stateTime, true);
 
-
         distanceToTouch.set(touch);
         if (isWeHaveOrder) {
             if (distanceToTouch.sub(pos).len() > shipSpeed){
@@ -98,7 +95,7 @@ public class MenuScreen extends BaseScreen {
         System.out.println("dispose");
         batch.dispose();
         img.dispose();
-        ship.dispose();
+        myHeroShip.getShip().dispose();
     }
 
 //    -----------------------------------------------------------------------------
@@ -143,19 +140,19 @@ public class MenuScreen extends BaseScreen {
     }
 
     private void move(){
-        if (isMoveUp && (pos.y + SHIP_HEIGHT < Gdx.graphics.getHeight())) {
+        if (isMoveUp && (pos.y + SHIP_CENTER_HEIGHT < Gdx.graphics.getHeight())) {
             pos.add(0f, shipSpeed);
             angle = 0f;
         }
-        if (isMoveDown && (pos.y > 0)) {
+        if (isMoveDown && (pos.y - SHIP_CENTER_HEIGHT > 0)) {
             pos.add(0f, -shipSpeed);
             angle = 180f;
         }
-        if (isMoveRight && (pos.x + SHIP_WIDTH < Gdx.graphics.getWidth())) {
+        if (isMoveRight && (pos.x + SHIP_CENTER_WIDTH < Gdx.graphics.getWidth())) {
             pos.add(shipSpeed, 0f);
             angle = 270f;
         }
-        if (isMoveLeft && (pos.x > 0)) {
+        if (isMoveLeft && (pos.x - SHIP_CENTER_WIDTH > 0)) {
             pos.add(-shipSpeed, 0f);
             angle = 90f;
         }
@@ -186,29 +183,6 @@ public class MenuScreen extends BaseScreen {
         touch.set(screenX, Gdx.graphics.getHeight() - screenY);
         moveToTouch.set(touch.cpy().sub(pos)).setLength(shipSpeed);
         isWeHaveOrder = true;
-        return false;
-    }
-
-//    -----------------------------------------------------------------------------
-//    Disabled methods
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
         return false;
     }
 }
