@@ -8,8 +8,9 @@ import ru.lesnoytishka.game.Enviroment.Rect;
 
 public class HeroFirstShip extends Sprite {
 
-    private float speed = 0.003f;
+    private float speed = 0.005f;
     private Vector2 speedToMove = new Vector2(speed, speed);
+    private Vector2 disanceToTouch = new Vector2();
     private Vector2 touch = new Vector2();
 
     public HeroFirstShip(TextureRegion region) {
@@ -30,13 +31,20 @@ public class HeroFirstShip extends Sprite {
     public boolean touchDown(Vector2 touch, int pointer) {
         this.touch = touch;
         speedToMove.set(touch.cpy().sub(position)).setLength(speed);
-        System.out.println(touch.x + " " + position.x);
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        this.touch = touch;
+        speedToMove.set(touch.cpy().sub(position)).setLength(speed);
         return false;
     }
 
     @Override
     public void update(float delta) {
-        if (touch.sub(position).len() > speed){
+        disanceToTouch.set(touch);
+        if (disanceToTouch.sub(position).len() > speed){
             position.add(speedToMove);
         } else {
             position.set(touch);

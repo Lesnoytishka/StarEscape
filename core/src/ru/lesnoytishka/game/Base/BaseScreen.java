@@ -17,13 +17,13 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     protected SpriteBatch batch;
 
     protected Rect worldBounds;
-    protected Rect screenBounds;
-    protected Rect glBounds;
+    private Rect screenBounds;
+    private Rect glBounds;
 
-    protected Matrix4 worldToGl;
-    protected Matrix3 screenToWorld;
+    private Matrix4 worldToGl;
+    private Matrix3 screenToWorld;
 
-    protected Vector2 touch;
+    private Vector2 touch;
 
     @Override
     public void show() {
@@ -49,7 +49,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         System.out.println("width = " + width + " height = " + height);
         screenBounds.setSize(width, height);
         screenBounds.setLeft(0);
-        screenBounds.setRight(0);
+        screenBounds.setBottom(0);
 
         float aspect = width / (float) height;
         worldBounds.setHeight(1f);
@@ -128,6 +128,12 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
+        touchDragged(touch, pointer);
+        return false;
+    }
+
+    public boolean touchDragged(Vector2 touch, int pointer){
         return false;
     }
 

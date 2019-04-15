@@ -54,4 +54,18 @@ public class MenuScreen extends BaseScreen {
         heroShip.touchDown(touch, pointer);
         return false;
     }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        heroShip.touchDragged(touch, pointer);
+        return false;
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (keycode == 51) {
+            System.out.println(heroShip.toString());
+        }
+        return false;
+    }
 }
