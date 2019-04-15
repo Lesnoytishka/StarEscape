@@ -1,6 +1,5 @@
 package ru.lesnoytishka.game.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -29,7 +28,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-
+        heroShip.update(delta);
         batch.begin();
         background.drawAnimated(batch);
         heroShip.draw(batch);
@@ -51,7 +50,8 @@ public class MenuScreen extends BaseScreen {
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown(Vector2 touch, int pointer) {
+        heroShip.touchDown(touch, pointer);
         return false;
     }
 }

@@ -17,13 +17,13 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     protected SpriteBatch batch;
 
     protected Rect worldBounds;
-    private Rect screenBounds;
-    private Rect glBounds;
+    protected Rect screenBounds;
+    protected Rect glBounds;
 
-    private Matrix4 worldToGl;
-    private Matrix3 screenToWorld;
+    protected Matrix4 worldToGl;
+    protected Matrix3 screenToWorld;
 
-    private Vector2 touch;
+    protected Vector2 touch;
 
     @Override
     public void show() {
@@ -117,6 +117,12 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
+        touchUp(touch, pointer);
+        return false;
+    }
+
+    public boolean touchUp(Vector2 touch, int pointer){
         return false;
     }
 
