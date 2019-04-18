@@ -1,23 +1,22 @@
 package ru.lesnoytishka.game.Sprites.GameScreen;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
 import ru.lesnoytishka.game.Base.BackgroundsObject;
 import ru.lesnoytishka.game.Enviroment.Rect;
 import ru.lesnoytishka.game.Enviroment.Rnd;
 
-public class BackgroundStars extends BackgroundsObject {
+public class BackgroundClouds extends BackgroundsObject {
 
     private int stepScale;
     private boolean directionScaleUp = true;
 
-    public BackgroundStars(TextureAtlas atlas, String starName) {
-        super(atlas, starName);
+    public BackgroundClouds(TextureAtlas atlas, String starName) {
+        super(atlas, starName, -0.005f, 0.005f, -0.01f, -0.2f, 0.1f);
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.01f);
+        setHeightProportion(0.2f);
         this.worldBounds = worldBounds;
         float posX = Rnd.getFloat(worldBounds.getLeft(), worldBounds.getRight());
         float posY = Rnd.getFloat(worldBounds.getTop(), worldBounds.getBottom());
@@ -30,9 +29,9 @@ public class BackgroundStars extends BackgroundsObject {
         stepScale++;
         if (stepScale < 80) {
             if (directionScaleUp) {
-                scale += 0.01f;
+                scale += 0.001f;
             } else {
-                scale -= 0.01f;
+                scale -= 0.001f;
             }
         } else {
             directionScaleUp = !directionScaleUp;
@@ -40,13 +39,22 @@ public class BackgroundStars extends BackgroundsObject {
         }
 
         position.mulAdd(speed, delta);
-        if (getLeft() > worldBounds.getRight()) setRight(worldBounds.getLeft());
-        if (getRight() < worldBounds.getLeft()) setLeft(worldBounds.getRight());
-        if (getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());
-        if (getBottom() > worldBounds.getTop()) setTop(worldBounds.getBottom());
+        if (getLeft() > worldBounds.getRight()) {
+            setRight(worldBounds.getLeft());
+            angle = Rnd.getFloat(0, 180);
+        }
+        if (getRight() < worldBounds.getLeft()) {
+            setLeft(worldBounds.getRight());
+            angle = Rnd.getFloat(0, 180);
+        }
+        if (getTop() < worldBounds.getBottom()) {
+            setBottom(worldBounds.getTop());
+            angle = Rnd.getFloat(0, 180);
+        }
+        if (getBottom() > worldBounds.getTop()) {
+            setTop(worldBounds.getBottom());
+            angle = Rnd.getFloat(0, 180);
+        }
 
     }
-
-
-
 }

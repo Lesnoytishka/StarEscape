@@ -22,6 +22,7 @@ public class GameScreen extends BaseScreen {
     private BackgroundStars[] starsYellow;
     private BackgroundStars[] starsWhite;
     private BackgroundStars[] starsZero;
+    private BackgroundClouds[] bgClouds;
 
     private Texture ship;
     private HeroFirstShip heroShip;
@@ -40,10 +41,10 @@ public class GameScreen extends BaseScreen {
     }
 
     private void createStarsAndClouds() {
-        starsBlue = new BackgroundStars[150];
-        starsYellow = new BackgroundStars[150];
-        starsWhite = new BackgroundStars[150];
-        starsZero = new BackgroundStars[150];
+        starsBlue = new BackgroundStars[200];
+        starsYellow = new BackgroundStars[200];
+        starsWhite = new BackgroundStars[200];
+        starsZero = new BackgroundStars[200];
 
         for (int i = 0; i < starsBlue.length; i++) {
             starsBlue[i] = new BackgroundStars(atlas, "bgStarBlue");
@@ -52,7 +53,10 @@ public class GameScreen extends BaseScreen {
             starsZero[i] = new BackgroundStars(atlas, "bgStarZero");
         }
 
-
+        bgClouds = new BackgroundClouds[9];
+        for (int i = 0; i < bgClouds.length; i++) {
+            bgClouds[i] = new BackgroundClouds(atlas, "bgCloud");
+        }
 
     }
 
@@ -70,7 +74,9 @@ public class GameScreen extends BaseScreen {
             starsWhite[i].update(delta);
             starsZero[i].update(delta);
         }
-
+        for (BackgroundClouds clouds : bgClouds) {
+            clouds.update(delta);
+        }
         heroShip.update(delta);
     }
 
@@ -83,8 +89,10 @@ public class GameScreen extends BaseScreen {
             starsWhite[i].draw(batch);
             starsZero[i].draw(batch);
         }
-
         heroShip.draw(batch);
+        for (BackgroundClouds clouds : bgClouds) {
+            clouds.draw(batch);
+        }
         batch.end();
     }
 
@@ -98,7 +106,9 @@ public class GameScreen extends BaseScreen {
             starsWhite[i].resize(worldBounds);
             starsZero[i].resize(worldBounds);
         }
-
+        for (BackgroundClouds clouds : bgClouds) {
+            clouds.resize(worldBounds);
+        }
         heroShip.resize(worldBounds);
     }
 
