@@ -22,6 +22,7 @@ public class ButtonPlay extends ScaledTouchUpButton {
         super.resize(worldBounds);
         setBottom(worldBounds.getBottom() + 0.08f);
         setLeft(worldBounds.getLeft() + 0.08f);
+        scale = 1.2f;
     }
 
     @Override

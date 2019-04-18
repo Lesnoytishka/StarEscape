@@ -1,5 +1,7 @@
 package ru.lesnoytishka.game.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -18,6 +20,8 @@ public class GameScreen extends BaseScreen {
     private Texture bg;
     private BackgroundGameScreen background;
 
+    private Music music;
+
     private BackgroundStars[] starsBlue;
     private BackgroundStars[] starsYellow;
     private BackgroundStars[] starsWhite;
@@ -34,10 +38,19 @@ public class GameScreen extends BaseScreen {
         bg = new Texture("Textures/gameBackground.png");
         background = new BackgroundGameScreen(new TextureRegion(bg));
 
+        playMusic();
+
         createStarsAndClouds();
 
         ship = new Texture("Textures/heroShip.png");
         heroShip = new HeroFirstShip(new TextureRegion(ship));
+    }
+
+    private void playMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.5f);
+        music.play();
     }
 
     private void createStarsAndClouds() {
@@ -118,6 +131,7 @@ public class GameScreen extends BaseScreen {
         bg.dispose();
         atlas.dispose();
         ship.dispose();
+        music.dispose();
     }
 
     @Override

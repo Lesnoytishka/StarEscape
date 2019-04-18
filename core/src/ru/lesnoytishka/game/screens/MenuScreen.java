@@ -1,6 +1,8 @@
 package ru.lesnoytishka.game.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -22,6 +24,7 @@ public class MenuScreen extends BaseScreen {
     private ButtonPlay btnPlay;
     private ButtonExit btnExit;
 
+    private Music music;
 
     public MenuScreen (Game game){
         this.game = game;
@@ -33,8 +36,16 @@ public class MenuScreen extends BaseScreen {
         atlas = new TextureAtlas("Textures/bgAtlas.pack");
         bg = new Texture("Textures/cosmos.png");
         background = new BackgroundMainMenu(bg, 16, 400, 500);
+        playMusic();
         btnPlay = new ButtonPlay(atlas, game);
         btnExit = new ButtonExit(atlas, game);
+    }
+
+    private void playMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/intro.mp3"));
+        music.setVolume(0.7f);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -68,6 +79,7 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+        music.dispose();
     }
 
     @Override
