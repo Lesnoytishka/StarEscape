@@ -1,37 +1,57 @@
 package ru.lesnoytishka.game.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.Base.BaseScreen;
 import ru.lesnoytishka.game.Enviroment.Rect;
-import ru.lesnoytishka.game.Sprites.BackgroundMainMenu;
-import ru.lesnoytishka.game.Sprites.HeroFirstShip;
+import ru.lesnoytishka.game.Sprites.MainMenu.BackgroundMainMenu;
+import ru.lesnoytishka.game.Sprites.MainMenu.ButtonExit;
+import ru.lesnoytishka.game.Sprites.MainMenu.ButtonPlay;
 
 public class MenuScreen extends BaseScreen {
 
+    private Game game;
+
+    private TextureAtlas atlas;
     private Texture bg;
-    private Texture ship;
     private BackgroundMainMenu background;
-    private HeroFirstShip heroShip;
+
+    private ButtonPlay btnPlay;
+    private ButtonExit btnExit;
+
+
+    public MenuScreen (Game game){
+        this.game = game;
+    }
 
     @Override
     public void show() {
         super.show();
-        bg = new Texture("cosmos.png");
+        atlas = new TextureAtlas("Textures/bgAtlas.pack");
+        bg = new Texture("Textures/cosmos.png");
         background = new BackgroundMainMenu(bg, 16, 400, 500);
-        ship = new Texture("heroShip.png");
-        heroShip = new HeroFirstShip(new TextureRegion(ship));
+        btnPlay = new ButtonPlay(atlas, game);
+        btnExit = new ButtonExit(atlas, game);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        heroShip.update(delta);
+        update(delta);
+        draw();
+    }
+
+    private void update(float delta) {
+    }
+
+    private void draw() {
         batch.begin();
         background.drawAnimated(batch);
-        heroShip.draw(batch);
+        btnPlay.draw(batch);
+        btnExit.draw(batch);
         batch.end();
     }
 
@@ -39,33 +59,43 @@ public class MenuScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        heroShip.resize(worldBounds);
+        btnPlay.resize(worldBounds);
+        btnExit.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
         super.dispose();
         bg.dispose();
-        ship.dispose();
+        atlas.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        heroShip.touchDown(touch, pointer);
+        btnPlay.touchDown(touch, pointer);
+        btnExit.touchDown(touch, pointer);
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        btnPlay.touchUp(touch, pointer);
+        btnExit.touchUp(touch, pointer);
         return false;
     }
 
     @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
-        heroShip.touchDragged(touch, pointer);
         return false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == 51) {
-            System.out.println(heroShip.toString());
-        }
         return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return super.touchUp(screenX, screenY, pointer, button);
     }
 }
