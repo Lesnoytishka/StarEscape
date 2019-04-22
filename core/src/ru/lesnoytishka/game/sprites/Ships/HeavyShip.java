@@ -3,20 +3,18 @@ package ru.lesnoytishka.game.sprites.Ships;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-
 import ru.lesnoytishka.game.base.BaseShip;
 import ru.lesnoytishka.game.environment.Rect;
 import ru.lesnoytishka.game.pools.BulletPool;
 
-public class LightShip extends BaseShip {
+public class HeavyShip extends BaseShip {
 
     private enum State {DESCENT, FIGHT}
     private State state;
     private Vector2 descentSpeed;
 
-    public LightShip(TextureAtlas atlas, String path, BulletPool bullets) {
+    public HeavyShip(TextureAtlas atlas, String path, BulletPool bullets) {
         super(atlas, path, bullets);
-        hp = 10;
         setHeightProportion(halfHeight);
     }
 
@@ -28,6 +26,5 @@ public class LightShip extends BaseShip {
         setHeightProportion(height);
         this.position.set(position);
         this.worldBounds = worldBounds;
-        hp = 10;
     }
 }

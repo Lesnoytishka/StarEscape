@@ -1,10 +1,7 @@
 package ru.lesnoytishka.game.sprites.Ships;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.base.BaseShip;
@@ -14,7 +11,6 @@ import ru.lesnoytishka.game.sprites.weapon.Bullet;
 
 public class HeroShip extends BaseShip {
 
-    private int hp = 50;
     private float speedSheep = 0.4f;
 
     private boolean isTouchOrder = false;
@@ -41,6 +37,7 @@ public class HeroShip extends BaseShip {
         speedToMoveWithDelta = new Vector2();
         distanceToTouch = new Vector2();
         touch = new Vector2();
+        this.hp = 50;
     }
 
     @Override

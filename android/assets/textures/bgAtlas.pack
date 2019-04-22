@@ -59,30 +59,37 @@ btnPlay
   orig: 360, 360
   offset: 0, 0
   index: -1
+enemy0
+  rotate: false
+  xy: 412, 782
+  size: 325, 341
+  orig: 325, 341
+  offset: 0, 0
+  index: -1
 heroShip
   rotate: false
-  xy: 412, 833
+  xy: 1477, 1657
   size: 237, 290
   orig: 237, 290
   offset: 0, 0
   index: -1
 beams0
   rotate: false
-  xy: 1477, 1762
+  xy: 1477, 1470
   size: 99, 185
   orig: 99, 185
   offset: 0, 0
   index: -1
 beams1
   rotate: false
-  xy: 651, 938
+  xy: 1716, 1762
   size: 97, 185
   orig: 97, 185
   offset: 0, 0
   index: -1
 bgStarZero
   rotate: false
-  xy: 1578, 1806
+  xy: 1815, 1806
   size: 141, 141
   orig: 141, 141
   offset: 0, 0

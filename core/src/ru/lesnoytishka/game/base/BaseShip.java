@@ -96,4 +96,15 @@ public abstract class BaseShip extends Sprite {
         soundExplosion.dispose();
         soundShot.dispose();
     }
+
+    public void takeDamage(int damage){
+        this.hp -= damage;
+        if (hp <= 0){
+            destroy();
+        }
+    }
+
+    public int getHp() {
+        return hp;
+    }
 }

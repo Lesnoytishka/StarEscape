@@ -10,10 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
 
 import ru.lesnoytishka.game.base.BackgroundsObject;
 import ru.lesnoytishka.game.base.BaseScreen;
+import ru.lesnoytishka.game.base.BaseShip;
+import ru.lesnoytishka.game.base.Sprite;
 import ru.lesnoytishka.game.environment.Rect;
 import ru.lesnoytishka.game.environment.Rnd;
 import ru.lesnoytishka.game.pools.BulletPool;
@@ -23,6 +24,7 @@ import ru.lesnoytishka.game.sprites.GameScreen.BackgroundGameScreen;
 import ru.lesnoytishka.game.sprites.GameScreen.BackgroundStars;
 import ru.lesnoytishka.game.sprites.Ships.HeroShip;
 import ru.lesnoytishka.game.sprites.Ships.LightShip;
+import ru.lesnoytishka.game.sprites.weapon.Bullet;
 
 public class GameScreen extends BaseScreen {
 
@@ -39,8 +41,7 @@ public class GameScreen extends BaseScreen {
     private ShipsPool shipsPool;
     private Vector2 spawnEnemyPosition;
     private float shipsSpawnTimer;
-    private float shipsSpawnInterval = 3f;
-
+    private float shipsSpawnInterval = Rnd.getFloat(1f, 5f);
 
     @Override
     public void show() {
@@ -50,11 +51,10 @@ public class GameScreen extends BaseScreen {
         background = new BackgroundGameScreen(new TextureRegion(bg));
 
         playMusic();
-
         createStarsAndClouds();
 
         bulletPool = new BulletPool();
-        shipsPool = new ShipsPool(atlas, "enemyLightShip", bulletPool);
+        shipsPool = new ShipsPool(atlas, "enemy0", bulletPool);
         heroShip = new HeroShip(atlas, bulletPool);
         spawnEnemyPosition = new Vector2();
     }
@@ -102,8 +102,35 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         createEnemyShips(delta);
         update(delta);
+        checkCollisions();
         freeAllDestroyedActiveSprites();
         draw();
+    }
+
+    private void checkCollisions() {
+        for (Object bullet : bulletPool.getActiveObjects()) {
+            if (bullet instanceof Bullet) {
+                if (!((Bullet) bullet).isOutside(heroShip) && !((Bullet) bullet).getOwner().equals(heroShip)) {
+                    heroShip.takeDamage(((Bullet) bullet).getDamage());
+                    ((Bullet) bullet).destroy();
+                    System.err.println("hero hp = " + heroShip.getHp());
+                }
+
+                for (Object ship : shipsPool.getActiveObjects()) {
+                    if (ship instanceof BaseShip) {
+                        if ( !((Bullet) bullet).isOutside((BaseShip) ship) && ((Bullet) bullet).getOwner().equals(heroShip)) {
+                            ((BaseShip) ship).takeDamage(((Bullet) bullet).getDamage());
+                            ((Bullet) bullet).destroy();
+                        }
+
+                        if (!((BaseShip) ship).isOutside(heroShip)){
+                            ((BaseShip) ship).takeDamage(15);
+                            heroShip.takeDamage(15);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void update(float delta) {
@@ -113,21 +140,23 @@ public class GameScreen extends BaseScreen {
         heroShip.update(delta);
         bulletPool.updateActiveSprites(delta);
         shipsPool.updateActiveSprites(delta);
-
-
     }
 
-    private void createEnemyShips(float delta){
+    private void createEnemyShips(float delta) {
         shipsSpawnTimer += delta;
         if (shipsSpawnTimer >= shipsSpawnInterval) {
             LightShip lightShip = (LightShip) shipsPool.obtain();
-            spawnEnemyPosition = new Vector2(Rnd.getFloat(worldBounds.getLeft() + lightShip.halfWidth, worldBounds.getRight() - lightShip.halfWidth), worldBounds.getTop() + lightShip.halfHeight);
+            spawnEnemyPosition = new Vector2(Rnd.getFloat(
+                    worldBounds.getLeft() + lightShip.halfWidth,
+                    worldBounds.getRight() - lightShip.halfWidth),
+                    worldBounds.getTop() + lightShip.halfHeight
+            );
             lightShip.set(0.08f, spawnEnemyPosition, worldBounds);
             shipsSpawnTimer = 0f;
         }
     }
 
-    private void freeAllDestroyedActiveSprites(){
+    private void freeAllDestroyedActiveSprites() {
         bulletPool.freeAllDestroyedActiveSprites();
         shipsPool.freeAllDestroyedActiveSprites();
     }
