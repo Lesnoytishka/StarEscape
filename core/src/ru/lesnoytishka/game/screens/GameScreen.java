@@ -7,12 +7,22 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.lesnoytishka.game.Base.BaseScreen;
-import ru.lesnoytishka.game.Enviroment.Rect;
-import ru.lesnoytishka.game.Sprites.GameScreen.BackgroundClouds;
-import ru.lesnoytishka.game.Sprites.GameScreen.BackgroundGameScreen;
-import ru.lesnoytishka.game.Sprites.GameScreen.BackgroundStars;
-import ru.lesnoytishka.game.Sprites.HeroFirstShip;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Timer;
+
+import ru.lesnoytishka.game.base.BackgroundsObject;
+import ru.lesnoytishka.game.base.BaseScreen;
+import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.environment.Rnd;
+import ru.lesnoytishka.game.pools.BulletPool;
+import ru.lesnoytishka.game.pools.ShipsPool;
+import ru.lesnoytishka.game.sprites.GameScreen.BackgroundClouds;
+import ru.lesnoytishka.game.sprites.GameScreen.BackgroundGameScreen;
+import ru.lesnoytishka.game.sprites.GameScreen.BackgroundStars;
+import ru.lesnoytishka.game.sprites.Ships.HeroShip;
+import ru.lesnoytishka.game.sprites.Ships.LightShip;
 
 public class GameScreen extends BaseScreen {
 
@@ -22,28 +32,31 @@ public class GameScreen extends BaseScreen {
 
     private Music music;
 
-    private BackgroundStars[] starsBlue;
-    private BackgroundStars[] starsYellow;
-    private BackgroundStars[] starsWhite;
-    private BackgroundStars[] starsZero;
-    private BackgroundClouds[] bgClouds;
+    private List<BackgroundsObject> environment;
 
-    private Texture ship;
-    private HeroFirstShip heroShip;
+    private HeroShip heroShip;
+    private BulletPool bulletPool;
+    private ShipsPool shipsPool;
+    private Vector2 spawnEnemyPosition;
+    private float shipsSpawnTimer;
+    private float shipsSpawnInterval = 3f;
+
 
     @Override
     public void show() {
         super.show();
-        atlas = new TextureAtlas("Textures/bgAtlas.pack");
-        bg = new Texture("Textures/gameBackground.png");
+        atlas = new TextureAtlas("textures/bgAtlas.pack");
+        bg = new Texture("textures/gameBackground.png");
         background = new BackgroundGameScreen(new TextureRegion(bg));
 
         playMusic();
 
         createStarsAndClouds();
 
-        ship = new Texture("Textures/heroShip.png");
-        heroShip = new HeroFirstShip(new TextureRegion(ship));
+        bulletPool = new BulletPool();
+        shipsPool = new ShipsPool(atlas, "enemyLightShip", bulletPool);
+        heroShip = new HeroShip(atlas, bulletPool);
+        spawnEnemyPosition = new Vector2();
     }
 
     private void playMusic() {
@@ -54,58 +67,87 @@ public class GameScreen extends BaseScreen {
     }
 
     private void createStarsAndClouds() {
-        starsBlue = new BackgroundStars[200];
-        starsYellow = new BackgroundStars[200];
-        starsWhite = new BackgroundStars[200];
-        starsZero = new BackgroundStars[200];
+        BackgroundStars[] starsBlue = new BackgroundStars[35];
+        BackgroundStars[] starsYellow = new BackgroundStars[20];
+        BackgroundStars[] starsWhite = new BackgroundStars[50];
+        BackgroundStars[] starsZero = new BackgroundStars[70];
+        BackgroundClouds[] bgClouds = new BackgroundClouds[8];
 
         for (int i = 0; i < starsBlue.length; i++) {
             starsBlue[i] = new BackgroundStars(atlas, "bgStarBlue");
+        }
+        for (int i = 0; i < starsYellow.length; i++) {
             starsYellow[i] = new BackgroundStars(atlas, "bgStarYellow");
+        }
+        for (int i = 0; i < starsWhite.length; i++) {
             starsWhite[i] = new BackgroundStars(atlas, "bgStarWhite");
+        }
+        for (int i = 0; i < starsZero.length; i++) {
             starsZero[i] = new BackgroundStars(atlas, "bgStarZero");
         }
-
-        bgClouds = new BackgroundClouds[9];
         for (int i = 0; i < bgClouds.length; i++) {
             bgClouds[i] = new BackgroundClouds(atlas, "bgCloud");
         }
 
+        environment = new ArrayList<BackgroundsObject>();
+        environment.addAll(Arrays.asList(starsBlue));
+        environment.addAll(Arrays.asList(starsYellow));
+        environment.addAll(Arrays.asList(starsWhite));
+        environment.addAll(Arrays.asList(starsZero));
+        environment.addAll(Arrays.asList(bgClouds));
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        createEnemyShips(delta);
         update(delta);
+        freeAllDestroyedActiveSprites();
         draw();
     }
 
     private void update(float delta) {
-        for (int i = 0; i < starsBlue.length; i++) {
-            starsBlue[i].update(delta);
-            starsYellow[i].update(delta);
-            starsWhite[i].update(delta);
-            starsZero[i].update(delta);
-        }
-        for (BackgroundClouds clouds : bgClouds) {
-            clouds.update(delta);
+        for (BackgroundsObject bgEnvi : environment) {
+            bgEnvi.update(delta);
         }
         heroShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
+        shipsPool.updateActiveSprites(delta);
+
+
+    }
+
+    private void createEnemyShips(float delta){
+        shipsSpawnTimer += delta;
+        if (shipsSpawnTimer >= shipsSpawnInterval) {
+            LightShip lightShip = (LightShip) shipsPool.obtain();
+            spawnEnemyPosition = new Vector2(Rnd.getFloat(worldBounds.getLeft() + lightShip.halfWidth, worldBounds.getRight() - lightShip.halfWidth), worldBounds.getTop() + lightShip.halfHeight);
+            lightShip.set(0.08f, spawnEnemyPosition, worldBounds);
+            shipsSpawnTimer = 0f;
+        }
+    }
+
+    private void freeAllDestroyedActiveSprites(){
+        bulletPool.freeAllDestroyedActiveSprites();
+        shipsPool.freeAllDestroyedActiveSprites();
     }
 
     private void draw() {
         batch.begin();
         background.draw(batch);
-        for (int i = 0; i < starsBlue.length; i++) {
-            starsBlue[i].draw(batch);
-            starsYellow[i].draw(batch);
-            starsWhite[i].draw(batch);
-            starsZero[i].draw(batch);
+        for (BackgroundsObject stars : environment) {
+            if (stars instanceof BackgroundStars) {
+                stars.draw(batch);
+            }
         }
         heroShip.draw(batch);
-        for (BackgroundClouds clouds : bgClouds) {
-            clouds.draw(batch);
+        for (BackgroundsObject clouds : environment) {
+            if (clouds instanceof BackgroundClouds) {
+                clouds.draw(batch);
+            }
         }
+        bulletPool.drawActiveSprites(batch);
+        shipsPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -113,14 +155,8 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        for (int i = 0; i < starsBlue.length; i++) {
-            starsBlue[i].resize(worldBounds);
-            starsYellow[i].resize(worldBounds);
-            starsWhite[i].resize(worldBounds);
-            starsZero[i].resize(worldBounds);
-        }
-        for (BackgroundClouds clouds : bgClouds) {
-            clouds.resize(worldBounds);
+        for (BackgroundsObject bgEnvi : environment) {
+            bgEnvi.resize(worldBounds);
         }
         heroShip.resize(worldBounds);
     }
@@ -130,8 +166,10 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
-        ship.dispose();
         music.dispose();
+        bulletPool.dispose();
+        shipsPool.dispose();
+        heroShip.dispose();
     }
 
     @Override
