@@ -124,8 +124,8 @@ public class GameScreen extends BaseScreen {
                         }
 
                         if (!((BaseShip) ship).isOutside(heroShip)){
-                            ((BaseShip) ship).takeDamage(15);
-                            heroShip.takeDamage(15);
+                            ((BaseShip) ship).takeDamage(1);
+                            heroShip.takeDamage(1);
                         }
                     }
                 }
@@ -137,9 +137,13 @@ public class GameScreen extends BaseScreen {
         for (BackgroundsObject bgEnvi : environment) {
             bgEnvi.update(delta);
         }
-        heroShip.update(delta);
-        bulletPool.updateActiveSprites(delta);
-        shipsPool.updateActiveSprites(delta);
+//        todo убрать к чертям эту паузу☺
+        if (!heroShip.isDestroyed()){
+            heroShip.update(delta);
+            bulletPool.updateActiveSprites(delta);
+            shipsPool.updateActiveSprites(delta);
+        }
+
     }
 
     private void createEnemyShips(float delta) {
