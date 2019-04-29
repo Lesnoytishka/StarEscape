@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.base.Sprite;
 import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.pools.ExplosionPool;
 
 public class Bullet extends Sprite {
 

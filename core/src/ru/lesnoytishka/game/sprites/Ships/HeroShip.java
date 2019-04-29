@@ -61,7 +61,6 @@ public class HeroShip extends BaseShip {
         shooting(delta);
         move(delta);
         returnToWorldArea();
-        setMovedSpeed();
     }
 
     @Override
@@ -97,7 +96,7 @@ public class HeroShip extends BaseShip {
 
 //    ----------------------------------------------------------------------------------------------
 
-    private void shoot() {
+    protected void shoot() {
         Bullet bullet = (Bullet) bulletPool.obtain();
         bullet.set(this, 15, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds);
         soundShot.play(0.03f);

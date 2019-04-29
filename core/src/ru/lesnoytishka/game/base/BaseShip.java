@@ -8,20 +8,25 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.environment.Rect;
 import ru.lesnoytishka.game.pools.BulletPool;
+import ru.lesnoytishka.game.pools.ExplosionPool;
 import ru.lesnoytishka.game.sprites.weapon.Bullet;
 
 public abstract class BaseShip extends Sprite {
 
     protected int hp = 10;
     protected float speedSheep = 0.2f;
+    protected float accelerationSpeedSheep = 0.4f;
     protected int weaponDamage;
-    protected float bulletHeight;
     protected Vector2 speed = new Vector2(0, -speedSheep);
+    protected Vector2 speedFight = new Vector2(0, -speedSheep);
 
+    protected float bulletHeight;
     protected Vector2 bulletSpeed;
     protected Vector2 bulletPosition;
 
     protected Rect worldBounds;
+    protected ExplosionPool explosionPool;
+    protected TextureRegion explosionRegion;
     protected BulletPool bulletPool;
     protected TextureRegion bulletRegion;
 
@@ -30,6 +35,8 @@ public abstract class BaseShip extends Sprite {
 
     protected Sound soundShot;
     protected Sound soundExplosion;
+
+    public BaseShip(){}
 
     public BaseShip(TextureAtlas atlas, String path, BulletPool bullets) {
         super(atlas.findRegion(path));
@@ -80,7 +87,7 @@ public abstract class BaseShip extends Sprite {
         }
     }
 
-    private void shoot() {
+    protected void shoot() {
         Bullet bullet = (Bullet) bulletPool.obtain();
         bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, bulletHeight, bulletPosition, worldBounds);
         soundShot.play(0.03f);

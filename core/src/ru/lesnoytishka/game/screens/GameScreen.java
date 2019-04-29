@@ -1,6 +1,8 @@
 package ru.lesnoytishka.game.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,8 +15,6 @@ import java.util.List;
 
 import ru.lesnoytishka.game.base.BackgroundsObject;
 import ru.lesnoytishka.game.base.BaseScreen;
-import ru.lesnoytishka.game.base.BaseShip;
-import ru.lesnoytishka.game.base.Sprite;
 import ru.lesnoytishka.game.environment.Rect;
 import ru.lesnoytishka.game.environment.Rnd;
 import ru.lesnoytishka.game.pools.BulletPool;
@@ -22,39 +22,52 @@ import ru.lesnoytishka.game.pools.ShipsPool;
 import ru.lesnoytishka.game.sprites.GameScreen.BackgroundClouds;
 import ru.lesnoytishka.game.sprites.GameScreen.BackgroundGameScreen;
 import ru.lesnoytishka.game.sprites.GameScreen.BackgroundStars;
+import ru.lesnoytishka.game.sprites.GameScreen.GameOver;
+import ru.lesnoytishka.game.sprites.GameScreen.NewGame;
 import ru.lesnoytishka.game.sprites.Ships.HeroShip;
 import ru.lesnoytishka.game.sprites.Ships.LightShip;
 import ru.lesnoytishka.game.sprites.weapon.Bullet;
 
 public class GameScreen extends BaseScreen {
 
+    private Game game;
+    private GameOver gameOver;
+    private NewGame newGame;
     private TextureAtlas atlas;
     private Texture bg;
     private BackgroundGameScreen background;
-
     private Music music;
-
     private List<BackgroundsObject> environment;
-
     private HeroShip heroShip;
     private BulletPool bulletPool;
     private ShipsPool shipsPool;
     private Vector2 spawnEnemyPosition;
     private float shipsSpawnTimer;
     private float shipsSpawnInterval = Rnd.getFloat(1f, 5f);
+    private boolean isInfoPressed = true;
+    private int score;
+
+    public GameScreen(Game game) {
+        this.game = game;
+    }
+
+//    ----------------------------------------------------------------------------------------------
+//    initialization
 
     @Override
     public void show() {
         super.show();
         atlas = new TextureAtlas("textures/bgAtlas.pack");
         bg = new Texture("textures/gameBackground.png");
+        gameOver = new GameOver(atlas);
+        newGame = new NewGame(atlas, game);
         background = new BackgroundGameScreen(new TextureRegion(bg));
 
         playMusic();
         createStarsAndClouds();
 
         bulletPool = new BulletPool();
-        shipsPool = new ShipsPool(atlas, "enemy0", bulletPool);
+        shipsPool = new ShipsPool(atlas, "enemyLight1", bulletPool);
         heroShip = new HeroShip(atlas, bulletPool);
         spawnEnemyPosition = new Vector2();
     }
@@ -72,7 +85,6 @@ public class GameScreen extends BaseScreen {
         BackgroundStars[] starsWhite = new BackgroundStars[50];
         BackgroundStars[] starsZero = new BackgroundStars[70];
         BackgroundClouds[] bgClouds = new BackgroundClouds[8];
-
         for (int i = 0; i < starsBlue.length; i++) {
             starsBlue[i] = new BackgroundStars(atlas, "bgStarBlue");
         }
@@ -97,42 +109,50 @@ public class GameScreen extends BaseScreen {
         environment.addAll(Arrays.asList(bgClouds));
     }
 
+//    ----------------------------------------------------------------------------------------------
+//    render
+
     @Override
     public void render(float delta) {
         super.render(delta);
-        createEnemyShips(delta);
         update(delta);
         checkCollisions();
         freeAllDestroyedActiveSprites();
         draw();
+
+        if (!isInfoPressed) {
+            Gdx.graphics.setTitle("" +
+                    "[hero hp = " + heroShip.getHp() + "]" +
+                    " [BulletPool act/free " + bulletPool.getActiveObjects().size() + " / " + bulletPool.getFreeObjects().size() + "]" +
+                    " [ShipPool act/free " + shipsPool.getActiveObjects().size() + " / " + shipsPool.getFreeObjects().size() + "]" +
+                    " [fps: " + Gdx.graphics.getFramesPerSecond() + "]"
+            );
+        } else {
+            Gdx.graphics.setTitle("StarEscape [hero hp = " + heroShip.getHp() + "] [score = " + score + "]");
+        }
     }
 
-
     private void checkCollisions() {
-        for (Object bullet : bulletPool.getActiveObjects()) {
-
-            if (bullet instanceof Bullet) {
-
-                if (!((Bullet) bullet).isOutside(heroShip) && !((Bullet) bullet).getOwner().equals(heroShip)) {
-                    heroShip.takeDamage(((Bullet) bullet).getDamage());
-                    ((Bullet) bullet).destroy();
-                    System.err.println("hero hp = " + heroShip.getHp());
+        List<Bullet> bulletList = bulletPool.getActiveObjects();
+        List<LightShip> enemiesList = shipsPool.getActiveObjects();
+        for (Bullet bullet : bulletList) {
+            if (!bullet.isDestroyed() && !bullet.isOutside(heroShip) && !bullet.getOwner().equals(heroShip)) {
+                heroShip.takeDamage(bullet.getDamage());
+                bullet.destroy();
+                System.err.println("hero hp = " + heroShip.getHp());
+            }
+            for (LightShip ship : enemiesList) {
+                if (ship.isDestroyed()) {
+                    continue;
                 }
-
-                for (Object ship : shipsPool.getActiveObjects()) {
-
-                    if (ship instanceof BaseShip) {
-                        if ( !((Bullet) bullet).isOutside((BaseShip) ship) && ((Bullet) bullet).getOwner().equals(heroShip)) {
-                            ((BaseShip) ship).takeDamage(((Bullet) bullet).getDamage());
-                            ((Bullet) bullet).destroy();
-                        }
-
-
-                        if (!((BaseShip) ship).isOutside(heroShip)){
-                            ((BaseShip) ship).takeDamage(1);
-                            heroShip.takeDamage(1);
-                        }
-                    }
+                if (!bullet.isOutside(ship) && bullet.getOwner().equals(heroShip)) {
+                    ship.takeDamage(bullet.getDamage());
+                    bullet.destroy();
+                    score++;
+                }
+                if (!ship.isOutside(heroShip)) {
+                    ship.takeDamage(1);
+                    heroShip.takeDamage(1);
                 }
             }
         }
@@ -142,13 +162,12 @@ public class GameScreen extends BaseScreen {
         for (BackgroundsObject bgEnvi : environment) {
             bgEnvi.update(delta);
         }
-//        todo убрать к чертям эту паузу☺
-        if (!heroShip.isDestroyed()){
+        if (heroShip.getHp() > 0) {
+            createEnemyShips(delta);
             heroShip.update(delta);
-            bulletPool.updateActiveSprites(delta);
             shipsPool.updateActiveSprites(delta);
         }
-
+        bulletPool.updateActiveSprites(delta);
     }
 
     private void createEnemyShips(float delta) {
@@ -159,6 +178,7 @@ public class GameScreen extends BaseScreen {
                     worldBounds.getLeft() + lightShip.halfWidth,
                     worldBounds.getRight() - lightShip.halfWidth),
                     worldBounds.getTop() + lightShip.halfHeight
+
             );
             lightShip.set(0.08f, spawnEnemyPosition, worldBounds);
             shipsSpawnTimer = 0f;
@@ -178,14 +198,19 @@ public class GameScreen extends BaseScreen {
                 stars.draw(batch);
             }
         }
-        heroShip.draw(batch);
-        for (BackgroundsObject clouds : environment) {
-            if (clouds instanceof BackgroundClouds) {
-                clouds.draw(batch);
+        if (heroShip.getHp() > 0) {
+            heroShip.draw(batch);
+            for (BackgroundsObject clouds : environment) {
+                if (clouds instanceof BackgroundClouds) {
+                    clouds.draw(batch);
+                }
             }
+            bulletPool.drawActiveSprites(batch);
+            shipsPool.drawActiveSprites(batch);
+        } else {
+            gameOver.draw(batch);
+            newGame.draw(batch);
         }
-        bulletPool.drawActiveSprites(batch);
-        shipsPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -197,6 +222,8 @@ public class GameScreen extends BaseScreen {
             bgEnvi.resize(worldBounds);
         }
         heroShip.resize(worldBounds);
+        gameOver.resize(worldBounds);
+        newGame.resize(worldBounds);
     }
 
     @Override
@@ -210,32 +237,49 @@ public class GameScreen extends BaseScreen {
         heroShip.dispose();
     }
 
+//    ----------------------------------------------------------------------------------------------
+//    input
+
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        heroShip.touchDown(touch, pointer);
+        if (!heroShip.isDestroyed()) {
+            heroShip.touchDown(touch, pointer);
+        } else {
+            newGame.touchDown(touch, pointer);
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
+        newGame.touchUp(touch, pointer);
         return false;
     }
 
     @Override
     public boolean touchDragged(Vector2 touch, int pointer) {
-        heroShip.touchDragged(touch, pointer);
+        if (!heroShip.isDestroyed()) {
+            heroShip.touchDragged(touch, pointer);
+        }
         return false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        heroShip.keyDown(keycode);
+        if (!heroShip.isDestroyed()) {
+            heroShip.keyDown(keycode);
+        }
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        heroShip.keyUp(keycode);
-        return super.keyUp(keycode);
+        if (!heroShip.isDestroyed()) {
+            heroShip.keyUp(keycode);
+        }
+        if (keycode == Input.Keys.Z) {
+            isInfoPressed = !isInfoPressed;
+        }
+        return false;
     }
 }

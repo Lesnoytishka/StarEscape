@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.environment.Regions;
 
 public class Sprite extends Rect {
 
@@ -29,13 +30,17 @@ public class Sprite extends Rect {
         regions[0] = region;
     }
 
-    public Sprite(Texture texture, int count, int width, int height){
+    public Sprite(Texture texture, int width, int height, int count){
         this.regions = new TextureRegion[count];
         frame = count - 1;
         for (int i = 0; i < count; i++) {
             this.regions[i] = new TextureRegion(texture, width * i, 0, width, height);
         }
         animation = new Animation(0.033f, regions);
+    }
+
+    public Sprite(TextureRegion texture, int rows, int cols, int count){
+        this.regions = Regions.split(texture, rows, cols, count);
     }
 
     public void setHeightProportion(float height){
