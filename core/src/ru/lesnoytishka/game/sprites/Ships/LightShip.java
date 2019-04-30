@@ -10,10 +10,6 @@ import ru.lesnoytishka.game.pools.BulletPool;
 
 public class LightShip extends BaseShip {
 
-    private enum State {DESCENT, FIGHT}
-    private State state;
-    private Vector2 descentSpeed;
-
     public LightShip(TextureAtlas atlas, String path, BulletPool bullets) {
         super(atlas, path, bullets);
         hp = 10;

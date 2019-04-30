@@ -8,7 +8,7 @@ import ru.lesnoytishka.game.environment.Rect;
 public class BackgroundMainMenu extends Sprite {
 
     public BackgroundMainMenu(Texture texture, int count, int width, int height) {
-        super(texture, count, width, height);
+        super(texture, width, height, count);
     }
 
     @Override

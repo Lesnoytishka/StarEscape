@@ -1,4 +1,4 @@
-package ru.lesnoytishka.game.sprites.MainMenu;
+package ru.lesnoytishka.game.sprites.GameScreen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -7,12 +7,12 @@ import ru.lesnoytishka.game.base.ScaledTouchUpButton;
 import ru.lesnoytishka.game.environment.Rect;
 import ru.lesnoytishka.game.screens.GameScreen;
 
-public class ButtonPlay extends ScaledTouchUpButton {
+public class NewGame extends ScaledTouchUpButton {
 
     private Game game;
 
-    public ButtonPlay(TextureAtlas atlas, Game game) {
-        super(atlas.findRegion("btnPlay"));
+    public NewGame(TextureAtlas atlas, Game game) {
+        super(atlas.findRegion("NEW GAME"));
         this.game = game;
         setHeightProportion(0.15f);
     }
@@ -20,9 +20,8 @@ public class ButtonPlay extends ScaledTouchUpButton {
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        setBottom(worldBounds.getBottom() + 0.08f);
-        setLeft(worldBounds.getLeft() + 0.08f);
-        scale = 1.2f;
+        setTop(worldBounds.getTop() - worldBounds.halfHeight);
+        scale = 1f;
     }
 
     @Override
