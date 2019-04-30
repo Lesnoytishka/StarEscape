@@ -15,15 +15,14 @@ import ru.lesnoytishka.game.environment.Rect;
 public abstract class BaseScreen implements Screen, InputProcessor {
 
     protected SpriteBatch batch;
-
     protected Rect worldBounds;
     private Rect screenBounds;
     private Rect glBounds;
-
     private Matrix4 worldToGl;
     private Matrix3 screenToWorld;
-
     private Vector2 touch;
+
+    protected boolean pause;
 
     @Override
     public void show() {
@@ -66,12 +65,12 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void pause() {
-        System.out.println("Pause");
+        pause = true;
     }
 
     @Override
     public void resume() {
-        System.out.println("Resume");
+        pause = false;
     }
 
     @Override
@@ -85,7 +84,11 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         batch.dispose();
     }
 
-//    -----------------------------------------------------------------------------
+    public boolean isPause() {
+        return pause;
+    }
+
+    //    -----------------------------------------------------------------------------
 //    Input methods
 
 

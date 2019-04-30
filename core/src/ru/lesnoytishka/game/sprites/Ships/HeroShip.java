@@ -19,18 +19,18 @@ public class HeroShip extends BaseShip {
     private boolean isMoveLeft = false;
     private boolean isMoveRight = false;
 
-    private Vector2 speedToGoUp;
-    private Vector2 speedToGoDown;
-    private Vector2 speedToGoLeft;
-    private Vector2 speedToGoRight;
+    private Vector2 speedToGoUp = new Vector2();
+    private Vector2 speedToGoDown = new Vector2();
+    private Vector2 speedToGoLeft = new Vector2();
+    private Vector2 speedToGoRight = new Vector2();
 
-    private Vector2 speedToMove;
+    private Vector2 speedToMove = new Vector2();
     private Vector2 speedToMoveWithDelta;
     private Vector2 distanceToTouch;
     private Vector2 touch;
 
     public HeroShip(TextureAtlas atlas, BulletPool bullets) {
-        super(atlas,"heroShip", bullets);
+        super(atlas, "heroShip", bullets);
 
         setMovedSpeed();
 
@@ -49,26 +49,26 @@ public class HeroShip extends BaseShip {
     }
 
     private void setMovedSpeed() {
-        speedToMove = new Vector2(speedSheep, speedSheep);
-        speedToGoUp = new Vector2(0, speedSheep);
-        speedToGoDown = new Vector2(0, -speedSheep);
-        speedToGoLeft = new Vector2(-speedSheep, 0);
-        speedToGoRight = new Vector2(speedSheep, 0);
+        speedToMove.set(speedSheep, speedSheep);
+        speedToGoUp.set(0, speedSheep);
+        speedToGoDown.set(0, -speedSheep);
+        speedToGoLeft.set(-speedSheep, 0);
+        speedToGoRight.set(speedSheep, 0);
     }
 
     @Override
     public void update(float delta) {
-        checkingLive();
         shooting(delta);
         move(delta);
         returnToWorldArea();
+        setMovedSpeed();
     }
 
     @Override
     protected void shooting(float delta) {
         bulletPosition = new Vector2(position.x, position.y + halfHeight);
         reloadTimer += delta;
-        if (reloadTimer >= reloadInterval){
+        if (reloadTimer >= reloadInterval) {
             reloadTimer = 0f;
             shoot();
         }
@@ -180,6 +180,13 @@ public class HeroShip extends BaseShip {
                 break;
             case Input.Keys.SPACE:
                 shoot();
+                break;
+//                todo прекратить баловаться с читами....
+            case Input.Keys.ALT_LEFT:
+                hp += 50;
+                break;
+            case Input.Keys.SHIFT_LEFT:
+                speedSheep += 1f;
                 break;
         }
         return false;

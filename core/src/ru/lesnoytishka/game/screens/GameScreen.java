@@ -107,9 +107,12 @@ public class GameScreen extends BaseScreen {
         draw();
     }
 
+
     private void checkCollisions() {
         for (Object bullet : bulletPool.getActiveObjects()) {
+
             if (bullet instanceof Bullet) {
+
                 if (!((Bullet) bullet).isOutside(heroShip) && !((Bullet) bullet).getOwner().equals(heroShip)) {
                     heroShip.takeDamage(((Bullet) bullet).getDamage());
                     ((Bullet) bullet).destroy();
@@ -117,15 +120,17 @@ public class GameScreen extends BaseScreen {
                 }
 
                 for (Object ship : shipsPool.getActiveObjects()) {
+
                     if (ship instanceof BaseShip) {
                         if ( !((Bullet) bullet).isOutside((BaseShip) ship) && ((Bullet) bullet).getOwner().equals(heroShip)) {
                             ((BaseShip) ship).takeDamage(((Bullet) bullet).getDamage());
                             ((Bullet) bullet).destroy();
                         }
 
+
                         if (!((BaseShip) ship).isOutside(heroShip)){
-                            ((BaseShip) ship).takeDamage(15);
-                            heroShip.takeDamage(15);
+                            ((BaseShip) ship).takeDamage(1);
+                            heroShip.takeDamage(1);
                         }
                     }
                 }
@@ -137,9 +142,13 @@ public class GameScreen extends BaseScreen {
         for (BackgroundsObject bgEnvi : environment) {
             bgEnvi.update(delta);
         }
-        heroShip.update(delta);
-        bulletPool.updateActiveSprites(delta);
-        shipsPool.updateActiveSprites(delta);
+//        todo убрать к чертям эту паузу☺
+        if (!heroShip.isDestroyed()){
+            heroShip.update(delta);
+            bulletPool.updateActiveSprites(delta);
+            shipsPool.updateActiveSprites(delta);
+        }
+
     }
 
     private void createEnemyShips(float delta) {
