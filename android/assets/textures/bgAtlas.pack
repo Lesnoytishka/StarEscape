@@ -1,0 +1,103 @@
+
+bgAtlas.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+enemyLightShip
+  rotate: false
+  xy: 1, 1125
+  size: 750, 822
+  orig: 750, 822
+  offset: 0, 0
+  index: -1
+bgCloud
+  rotate: false
+  xy: 1, 725
+  size: 409, 398
+  orig: 409, 398
+  offset: 0, 0
+  index: -1
+bgStarBlue
+  rotate: false
+  xy: 753, 1587
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+bgStarRed
+  rotate: false
+  xy: 1, 363
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+bgStarWhite
+  rotate: false
+  xy: 753, 1225
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+bgStarYellow
+  rotate: false
+  xy: 1115, 1587
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+btnExit
+  rotate: false
+  xy: 1, 1
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+btnPlay
+  rotate: false
+  xy: 1115, 1225
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+enemy0
+  rotate: false
+  xy: 412, 782
+  size: 325, 341
+  orig: 325, 341
+  offset: 0, 0
+  index: -1
+heroShip
+  rotate: false
+  xy: 1477, 1657
+  size: 237, 290
+  orig: 237, 290
+  offset: 0, 0
+  index: -1
+beams0
+  rotate: false
+  xy: 1477, 1470
+  size: 99, 185
+  orig: 99, 185
+  offset: 0, 0
+  index: -1
+beams1
+  rotate: false
+  xy: 1716, 1762
+  size: 97, 185
+  orig: 97, 185
+  offset: 0, 0
+  index: -1
+bgStarZero
+  rotate: false
+  xy: 1815, 1806
+  size: 141, 141
+  orig: 141, 141
+  offset: 0, 0
+  index: -1
+bgStarGreen
+  rotate: false
+  xy: 753, 1158
+  size: 65, 65
+  orig: 65, 65
+  offset: 0, 0
+  index: -1

@@ -1,15 +1,17 @@
 package ru.lesnoytishka.game.screens;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.lesnoytishka.game.Base.BaseScreen;
-import ru.lesnoytishka.game.Enviroment.Rect;
-import ru.lesnoytishka.game.Sprites.MainMenu.BackgroundMainMenu;
-import ru.lesnoytishka.game.Sprites.MainMenu.ButtonExit;
-import ru.lesnoytishka.game.Sprites.MainMenu.ButtonPlay;
+import ru.lesnoytishka.game.base.BaseScreen;
+import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.sprites.MainMenu.BackgroundMainMenu;
+import ru.lesnoytishka.game.sprites.MainMenu.ButtonExit;
+import ru.lesnoytishka.game.sprites.MainMenu.ButtonPlay;
 
 public class MenuScreen extends BaseScreen {
 
@@ -22,6 +24,7 @@ public class MenuScreen extends BaseScreen {
     private ButtonPlay btnPlay;
     private ButtonExit btnExit;
 
+    private Music music;
 
     public MenuScreen (Game game){
         this.game = game;
@@ -30,11 +33,19 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        atlas = new TextureAtlas("Textures/bgAtlas.pack");
-        bg = new Texture("Textures/cosmos.png");
+        atlas = new TextureAtlas("textures/bgAtlas.pack");
+        bg = new Texture("textures/cosmos.png");
         background = new BackgroundMainMenu(bg, 16, 400, 500);
+        playMusic();
         btnPlay = new ButtonPlay(atlas, game);
         btnExit = new ButtonExit(atlas, game);
+    }
+
+    private void playMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/PPKreload.mp3"));
+        music.setVolume(0.7f);
+        music.setLooping(true);
+        music.play();
     }
 
     @Override
@@ -68,6 +79,7 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+        music.dispose();
     }
 
     @Override
