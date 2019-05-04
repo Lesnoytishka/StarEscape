@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.base.Sprite;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.pools.ExplosionPool;
 
 public class Bullet extends Sprite {
@@ -13,6 +13,7 @@ public class Bullet extends Sprite {
     private Vector2 speed;
     private int damage;
     private Object owner;
+    private ExplosionPool explosionPool;
 
     public Bullet() {
         regions = new TextureRegion[1];
@@ -26,7 +27,8 @@ public class Bullet extends Sprite {
             TextureRegion region,
             float height,
             Vector2 position,
-            Rect worldBounds
+            Rect worldBounds,
+            ExplosionPool explosionPool
     ){
         this.owner = owner;
         this.damage = damage;
@@ -35,6 +37,7 @@ public class Bullet extends Sprite {
         setHeightProportion(height);
         this.position.set(position);
         this.worldBounds = worldBounds;
+        this.explosionPool = explosionPool;
     }
 
     @Override
@@ -51,5 +54,15 @@ public class Bullet extends Sprite {
 
     public Object getOwner() {
         return owner;
+    }
+
+    public void detonation(){
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(this);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

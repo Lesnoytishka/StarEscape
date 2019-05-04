@@ -5,13 +5,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.base.BaseShip;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.pools.BulletPool;
+import ru.lesnoytishka.game.pools.ExplosionPool;
 import ru.lesnoytishka.game.sprites.weapon.Bullet;
 
 public class HeroShip extends BaseShip {
 
     private float speedSheep = 0.4f;
+    private int maxHP = 50;
 
     private boolean isTouchOrder = false;
     private boolean isMoveUp = false;
@@ -29,23 +31,33 @@ public class HeroShip extends BaseShip {
     private Vector2 distanceToTouch;
     private Vector2 touch;
 
-    public HeroShip(TextureAtlas atlas, BulletPool bullets) {
-        super(atlas, "heroShip", bullets);
-
+    public HeroShip(TextureAtlas atlas, BulletPool bullets, ExplosionPool explosionPool, Rect worldBound) {
+        super(atlas, "HeroShip", bullets, explosionPool);
+        this.explosionPool = explosionPool;
         setMovedSpeed();
 
         speedToMoveWithDelta = new Vector2();
         distanceToTouch = new Vector2();
         touch = new Vector2();
-        this.hp = 50;
+        this.worldBounds = worldBound;
+        this.hp = maxHP;
+    }
+
+    public void reset() {
+        flushDestroy();
+        hp = maxHP;
+        setBottom(worldBounds.getBottom() + 0.05f);
+        disableButtonsMove();
     }
 
     @Override
-    protected void setWeapon(TextureAtlas atlas, BulletPool bullets) {
+    protected void setWeapon(TextureAtlas atlas, BulletPool bullets, ExplosionPool explosionPool) {
         bulletPool = bullets;
         bulletRegion = atlas.findRegion("beams1");
         bulletSpeed = new Vector2(0, 0.5f);
         reloadInterval = 0.2f;
+        weaponDamage = 1;
+        this.explosionPool = explosionPool;
     }
 
     private void setMovedSpeed() {
@@ -98,7 +110,7 @@ public class HeroShip extends BaseShip {
 
     protected void shoot() {
         Bullet bullet = (Bullet) bulletPool.obtain();
-        bullet.set(this, 15, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds);
+        bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
         soundShot.play(0.03f);
     }
 
@@ -211,5 +223,17 @@ public class HeroShip extends BaseShip {
                 break;
         }
         return false;
+    }
+
+    public int getMaxHP() {
+        return maxHP;
+    }
+
+    public void setMaxHP(int hp){
+        maxHP = hp;
+    }
+
+    public void setHP(int hp){
+        this.hp = hp;
     }
 }

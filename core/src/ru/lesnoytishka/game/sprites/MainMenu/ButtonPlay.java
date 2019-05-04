@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.lesnoytishka.game.base.ScaledTouchUpButton;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.screens.GameScreen;
 
 public class ButtonPlay extends ScaledTouchUpButton {
@@ -27,6 +27,6 @@ public class ButtonPlay extends ScaledTouchUpButton {
 
     @Override
     protected void action() {
-        game.setScreen(new GameScreen(game));
+        game.setScreen(new GameScreen());
     }
 }

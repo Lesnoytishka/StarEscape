@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.lesnoytishka.game.base.ScaledTouchUpButton;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 
 public class ButtonExit extends ScaledTouchUpButton {
 

@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.lesnoytishka.game.environment.Rect;
-import ru.lesnoytishka.game.environment.Regions;
+import ru.lesnoytishka.game.utils.Rect;
+import ru.lesnoytishka.game.utils.Regions;
 
 public class Sprite extends Rect {
 

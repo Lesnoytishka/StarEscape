@@ -3,8 +3,8 @@ package ru.lesnoytishka.game.sprites.GameScreen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.lesnoytishka.game.base.BackgroundsObject;
-import ru.lesnoytishka.game.environment.Rect;
-import ru.lesnoytishka.game.environment.Rnd;
+import ru.lesnoytishka.game.utils.Rect;
+import ru.lesnoytishka.game.utils.Rnd;
 
 public class BackgroundStars extends BackgroundsObject {
 

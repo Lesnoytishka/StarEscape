@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.base.BaseScreen;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.sprites.MainMenu.BackgroundMainMenu;
 import ru.lesnoytishka.game.sprites.MainMenu.ButtonExit;
 import ru.lesnoytishka.game.sprites.MainMenu.ButtonPlay;

@@ -3,7 +3,7 @@ package ru.lesnoytishka.game.sprites.MainMenu;
 import com.badlogic.gdx.graphics.Texture;
 
 import ru.lesnoytishka.game.base.Sprite;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 
 public class BackgroundMainMenu extends Sprite {
 

@@ -3,8 +3,8 @@ package ru.lesnoytishka.game.base;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.lesnoytishka.game.environment.Rect;
-import ru.lesnoytishka.game.environment.Rnd;
+import ru.lesnoytishka.game.utils.Rect;
+import ru.lesnoytishka.game.utils.Rnd;
 
 public abstract class BackgroundsObject extends Sprite {
 
