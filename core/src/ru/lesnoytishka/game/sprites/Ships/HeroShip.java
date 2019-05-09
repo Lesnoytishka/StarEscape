@@ -47,6 +47,7 @@ public class HeroShip extends BaseShip {
     public void reset() {
         flushDestroy();
         hp = baseMaxHP;
+        maxHP = baseMaxHP;
         setBottom(worldBounds.getBottom() + 0.05f);
         disableButtonsMove();
     }
@@ -193,7 +194,6 @@ public class HeroShip extends BaseShip {
             case Input.Keys.SPACE:
                 shoot();
                 break;
-//                todo прекратить баловаться с читами....
             case Input.Keys.ALT_LEFT:
                 hp += 50;
                 break;

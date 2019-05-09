@@ -17,7 +17,7 @@ public class SupportItem extends Sprite {
     public SupportItem(TextureAtlas atlas, String itemName, HeroShip heroShip) {
         super(atlas.findRegion(itemName));
         setHeightProportion(0.2f);
-        followSpeed = new Vector2(SPEED, SPEED);
+        followSpeed = new Vector2();
         followSpeedWihDelta = new Vector2();
         distanceToHeroShip = new Vector2();
         this.heroShip = heroShip;
@@ -31,7 +31,6 @@ public class SupportItem extends Sprite {
         if (angle <= 0) {
             angle = 360;
         }
-
         if (!isOutside(heroShip)) {
             followSpeed.set(heroShip.position.cpy().sub(position)).setLength(SPEED);
             distanceToHeroShip.set(heroShip.position);
