@@ -51,11 +51,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
-        update(delta);
         draw();
-    }
-
-    private void update(float delta) {
     }
 
     private void draw() {

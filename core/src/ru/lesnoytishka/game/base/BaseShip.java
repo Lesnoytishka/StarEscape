@@ -16,7 +16,6 @@ public abstract class BaseShip extends Sprite {
 
     protected int hp = 10;
     protected float speedSheep = 0.2f;
-    protected float accelerationSpeedSheep = 0.4f;
     protected int weaponDamage;
     protected Vector2 speed = new Vector2(0, -speedSheep);
     protected Vector2 speedFight = new Vector2(0, -speedSheep);
@@ -39,7 +38,6 @@ public abstract class BaseShip extends Sprite {
 
     public BaseShip(){
         this.bulletSpeed = new Vector2();
-
     }
 
     public BaseShip(TextureAtlas atlas, String path, BulletPool bullets, ExplosionPool explosionPool) {

@@ -14,7 +14,7 @@ import ru.lesnoytishka.game.utils.Rect;
 
 public abstract class BaseScreen implements Screen, InputProcessor {
 
-    protected enum PlayingStatus {PLAYING, PASUSE, GAME_OVER}
+    protected enum PlayingStatus {PLAYING, PAUSE, GAME_OVER}
 
     protected PlayingStatus playingStatus = PlayingStatus.PLAYING;
 
@@ -67,7 +67,7 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void pause() {
-        playingStatus = PlayingStatus.PASUSE;
+        playingStatus = PlayingStatus.PAUSE;
     }
 
     @Override

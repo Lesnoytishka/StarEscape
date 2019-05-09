@@ -15,10 +15,10 @@ public class Sprite extends Rect {
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
-    protected TextureRegion animatedRegion;
+    private TextureRegion animatedRegion;
     protected int frame = 0;
-    protected Animation animation;
-    protected float stateTime;
+    private Animation animation;
+    private float stateTime;
 
     private boolean isDestroyed;
 

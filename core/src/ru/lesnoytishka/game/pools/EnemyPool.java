@@ -1,7 +1,5 @@
 package ru.lesnoytishka.game.pools;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
 import ru.lesnoytishka.game.base.SpritesPool;
 import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.sprites.Ships.Enemy;

@@ -11,8 +11,8 @@ public class RepairKit extends SupportItem {
 
     private Rect worldBounds;
 
-    public RepairKit(TextureAtlas atlas, Rect worldBounds) {
-        super(atlas,"repairKit");
+    public RepairKit(TextureAtlas atlas, Rect worldBounds, HeroShip heroShip) {
+        super(atlas,"repairKit", heroShip);
         this.worldBounds = worldBounds;
     }
 
@@ -21,11 +21,8 @@ public class RepairKit extends SupportItem {
     }
 
     @Override
-    public void checkCollision(HeroShip heroShip){
-        if (!isOutside(heroShip)) {
-            heroShip.setMaxHP(heroShip.getMaxHP() + 10);
-            heroShip.setHP(heroShip.getMaxHP());
-            destroy();
-        }
+    protected void activateBuff(){
+        heroShip.setMaxHP(heroShip.getMaxHP() + 10);
+        heroShip.setHP(heroShip.getMaxHP());
     }
 }

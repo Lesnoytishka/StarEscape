@@ -7,8 +7,8 @@ import java.util.List;
 
 public abstract class SpritesPool<T extends Sprite> {
 
-    protected final List<T> activeObjects = new ArrayList<T>();
-    protected final List<T> freeObjects = new ArrayList<T>();
+    private final List<T> activeObjects = new ArrayList<T>();
+    private final List<T> freeObjects = new ArrayList<T>();
 
     protected abstract T newObject();
 

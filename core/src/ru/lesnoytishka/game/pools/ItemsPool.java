@@ -14,7 +14,7 @@ public class ItemsPool extends SpritesPool<SupportItem> {
     private TextureAtlas atlas;
     private HeroShip heroShip;
     private Rect worldBounds;
-    private float generateInterval = Rnd.getFloat(4f, 76f);
+    private float generateInterval = Rnd.getFloat(1f, 2);
     private float generateTimer;
 
     public ItemsPool(TextureAtlas atlas, HeroShip heroShip, Rect worldBounds) {
@@ -35,12 +35,6 @@ public class ItemsPool extends SpritesPool<SupportItem> {
 
     @Override
     protected SupportItem newObject() {
-        return new RepairKit(atlas, worldBounds);
-    }
-
-    public void checkCollisions() {
-        for (SupportItem item : activeObjects) {
-            item.checkCollision(heroShip);
-        }
+        return new RepairKit(atlas, worldBounds, heroShip);
     }
 }

@@ -17,6 +17,7 @@ import ru.lesnoytishka.game.base.BackgroundsObject;
 import ru.lesnoytishka.game.base.BaseScreen;
 import ru.lesnoytishka.game.pools.ItemsPool;
 import ru.lesnoytishka.game.sprites.GameScreen.HPbar;
+import ru.lesnoytishka.game.sprites.GameScreen.TrackingStar;
 import ru.lesnoytishka.game.sprites.weapon.RepairKit;
 import ru.lesnoytishka.game.utils.Font;
 import ru.lesnoytishka.game.utils.Rect;
@@ -74,7 +75,6 @@ public class GameScreen extends BaseScreen {
         background = new BackgroundGameScreen(new TextureRegion(bg));
 
         playMusic();
-        createStarsAndClouds();
 
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(atlas);
@@ -82,6 +82,8 @@ public class GameScreen extends BaseScreen {
         enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds);
         enemyGenerator = new EnemyGenerator(atlas, enemyPool, enemyShotSound, worldBounds);
         itemsPool = new ItemsPool(atlas, heroShip, worldBounds);
+
+        createStarsAndClouds();
 
         font = new Font("font/words.fnt", "font/words.png");
         font.setFontSize(0.03f);
@@ -99,22 +101,22 @@ public class GameScreen extends BaseScreen {
     }
 
     private void createStarsAndClouds() {
-        BackgroundStars[] starsBlue = new BackgroundStars[35];
-        BackgroundStars[] starsYellow = new BackgroundStars[20];
-        BackgroundStars[] starsWhite = new BackgroundStars[50];
-        BackgroundStars[] starsZero = new BackgroundStars[70];
+        BackgroundStars[] starsBlue = new TrackingStar[35];
+        BackgroundStars[] starsYellow = new TrackingStar[20];
+        BackgroundStars[] starsWhite = new TrackingStar[50];
+        BackgroundStars[] starsZero = new TrackingStar[70];
         BackgroundClouds[] bgClouds = new BackgroundClouds[8];
         for (int i = 0; i < starsBlue.length; i++) {
-            starsBlue[i] = new BackgroundStars(atlas, "bgStarBlue");
+            starsBlue[i] = new TrackingStar(atlas, "bgStarBlue", heroShip.getSpeed());
         }
         for (int i = 0; i < starsYellow.length; i++) {
-            starsYellow[i] = new BackgroundStars(atlas, "bgStarYellow");
+            starsYellow[i] = new TrackingStar(atlas, "bgStarYellow", heroShip.getSpeed());
         }
         for (int i = 0; i < starsWhite.length; i++) {
-            starsWhite[i] = new BackgroundStars(atlas, "bgStarWhite");
+            starsWhite[i] = new TrackingStar(atlas, "bgStarWhite", heroShip.getSpeed());
         }
         for (int i = 0; i < starsZero.length; i++) {
-            starsZero[i] = new BackgroundStars(atlas, "bgStarZero");
+            starsZero[i] = new TrackingStar(atlas, "bgStarZero", heroShip.getSpeed());
         }
         for (int i = 0; i < bgClouds.length; i++) {
             bgClouds[i] = new BackgroundClouds(atlas, "bgCloud");
@@ -156,7 +158,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
-        if (playingStatus != PlayingStatus.PASUSE) {
+        if (playingStatus != PlayingStatus.PAUSE) {
             super.render(delta);
             update(delta);
             checkCollisions();
@@ -202,7 +204,6 @@ public class GameScreen extends BaseScreen {
                 }
             }
         }
-        itemsPool.checkCollisions();
     }
 
     private void update(float delta) {

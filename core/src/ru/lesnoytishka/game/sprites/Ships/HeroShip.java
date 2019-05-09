@@ -12,6 +12,7 @@ import ru.lesnoytishka.game.sprites.weapon.Bullet;
 
 public class HeroShip extends BaseShip {
 
+    private final int baseMaxHP = 50;
     private float speedSheep = 0.4f;
     private int maxHP = 50;
 
@@ -45,7 +46,7 @@ public class HeroShip extends BaseShip {
 
     public void reset() {
         flushDestroy();
-        hp = maxHP;
+        hp = baseMaxHP;
         setBottom(worldBounds.getBottom() + 0.05f);
         disableButtonsMove();
     }
@@ -235,5 +236,9 @@ public class HeroShip extends BaseShip {
 
     public void setHP(int hp){
         this.hp = hp;
+    }
+
+    public Vector2 getSpeed() {
+        return speedToMove;
     }
 }
