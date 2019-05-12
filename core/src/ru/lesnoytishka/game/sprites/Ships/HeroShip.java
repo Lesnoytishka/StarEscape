@@ -32,6 +32,10 @@ public class HeroShip extends BaseShip {
     private Vector2 distanceToTouch;
     private Vector2 touch;
 
+    private int countBullet;
+    private Vector2 bulletPosition1;
+    private Vector2 bulletPosition2;
+
     public HeroShip(TextureAtlas atlas, BulletPool bullets, ExplosionPool explosionPool, Rect worldBound) {
         super(atlas, "HeroShip", bullets, explosionPool);
         this.explosionPool = explosionPool;
@@ -42,6 +46,9 @@ public class HeroShip extends BaseShip {
         touch = new Vector2();
         this.worldBounds = worldBound;
         this.hp = maxHP;
+        countBullet = 1;
+        bulletPosition1 = new Vector2();
+        bulletPosition2 = new Vector2();
     }
 
     public void reset() {
@@ -75,11 +82,23 @@ public class HeroShip extends BaseShip {
         shooting(delta);
         move(delta);
         returnToWorldArea();
+        if (countBullet > 3){
+            countBullet = 3;
+        }
     }
 
     @Override
     protected void shooting(float delta) {
-        bulletPosition = new Vector2(position.x, position.y + halfHeight);
+        if (countBullet == 1) {
+            bulletPosition = new Vector2(position.x, position.y + halfHeight);
+        } else if (countBullet == 2) {
+            bulletPosition = new Vector2(position.x - (halfWidth / 2) + 0.005f, position.y + halfHeight);
+            bulletPosition1 = new Vector2(position.x + (halfWidth / 2) - 0.005f, position.y + halfHeight);
+        } else if (countBullet == 3) {
+            bulletPosition = new Vector2(position.x, position.y + halfHeight);
+            bulletPosition1 = new Vector2(position.x - halfWidth + 0.01f, position.y + halfHeight - 0.015f);
+            bulletPosition2 = new Vector2(position.x + halfWidth - 0.01f, position.y + halfHeight - 0.015f);
+        }
         reloadTimer += delta;
         if (reloadTimer >= reloadInterval) {
             reloadTimer = 0f;
@@ -87,12 +106,32 @@ public class HeroShip extends BaseShip {
         }
     }
 
+    protected void shoot() {
+        if (countBullet == 1) {
+            Bullet bullet = (Bullet) bulletPool.obtain();
+            bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
+        } else if (countBullet == 2) {
+            Bullet bullet = (Bullet) bulletPool.obtain();
+            Bullet bullet1 = (Bullet) bulletPool.obtain();
+            bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
+            bullet1.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition1, worldBounds, explosionPool);
+        } else if (countBullet == 3) {
+            Bullet bullet = (Bullet) bulletPool.obtain();
+            Bullet bullet1 = (Bullet) bulletPool.obtain();
+            Bullet bullet2 = (Bullet) bulletPool.obtain();
+            bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
+            bullet1.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition1, worldBounds, explosionPool);
+            bullet2.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition2, worldBounds, explosionPool);
+        }
+        soundShot.play(0.03f);
+    }
+
     private void returnToWorldArea() {
         if (getTop() > worldBounds.getTop()) {
             setTop(worldBounds.getTop());
         }
-        if (getBottom() < worldBounds.getBottom()) {
-            setBottom(worldBounds.getBottom());
+        if (getBottom() < worldBounds.getBottom() + 0.03f) {
+            setBottom(worldBounds.getBottom() + 0.03f);
         }
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
@@ -109,12 +148,6 @@ public class HeroShip extends BaseShip {
     }
 
 //    ----------------------------------------------------------------------------------------------
-
-    protected void shoot() {
-        Bullet bullet = (Bullet) bulletPool.obtain();
-        bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
-        soundShot.play(0.03f);
-    }
 
     @Override
     protected void move(float delta) {
@@ -221,6 +254,7 @@ public class HeroShip extends BaseShip {
             case Input.Keys.RIGHT:
             case Input.Keys.D:
                 isMoveRight = false;
+                countBullet++;
                 break;
         }
         return false;
@@ -240,5 +274,14 @@ public class HeroShip extends BaseShip {
 
     public Vector2 getSpeed() {
         return speedToMove;
+    }
+
+
+    public int getCountBullet() {
+        return countBullet;
+    }
+
+    public void setCountBullet(int countBullet) {
+        this.countBullet = countBullet;
     }
 }

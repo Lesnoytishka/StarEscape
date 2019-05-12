@@ -169,21 +169,21 @@ enemyMedium1
   orig: 689, 972
   offset: 0, 0
   index: -1
-enemy0
-  rotate: false
-  xy: 1458, 1645
-  size: 325, 341
-  orig: 325, 341
-  offset: 0, 0
-  index: -1
 
 bgAtlas3.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-repairKit
+bulletAdd
   rotate: false
   xy: 1, 1
+  size: 810, 810
+  orig: 810, 810
+  offset: 0, 0
+  index: -1
+repairKit
+  rotate: false
+  xy: 813, 1
   size: 810, 810
   orig: 810, 810
   offset: 0, 0

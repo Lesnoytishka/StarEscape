@@ -18,7 +18,7 @@ import ru.lesnoytishka.game.base.BaseScreen;
 import ru.lesnoytishka.game.pools.ItemsPool;
 import ru.lesnoytishka.game.sprites.GameScreen.HPbar;
 import ru.lesnoytishka.game.sprites.GameScreen.TrackingStar;
-import ru.lesnoytishka.game.sprites.weapon.RepairKit;
+import ru.lesnoytishka.game.sprites.weapon.BuffItemGenerator;
 import ru.lesnoytishka.game.utils.Font;
 import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.pools.BulletPool;
@@ -53,6 +53,7 @@ public class GameScreen extends BaseScreen {
     private EnemyPool enemyPool;
     private EnemyGenerator enemyGenerator;
     private ItemsPool itemsPool;
+    private BuffItemGenerator itemsGenerator;
     private boolean isInfoPressed = true;
     private int score;
     private Font font;
@@ -60,7 +61,6 @@ public class GameScreen extends BaseScreen {
     private StringBuilder sbHp;
     private HPbar hPbar;
 
-    private RepairKit repairKit;
 
 //    ----------------------------------------------------------------------------------------------
 //    initialization
@@ -81,7 +81,8 @@ public class GameScreen extends BaseScreen {
         heroShip = new HeroShip(atlas, bulletPool, explosionPool, worldBounds);
         enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds);
         enemyGenerator = new EnemyGenerator(atlas, enemyPool, enemyShotSound, worldBounds);
-        itemsPool = new ItemsPool(atlas, heroShip, worldBounds);
+        itemsPool = new ItemsPool(atlas, heroShip);
+        itemsGenerator = new BuffItemGenerator(itemsPool, worldBounds);
 
         createStarsAndClouds();
 
@@ -212,7 +213,7 @@ public class GameScreen extends BaseScreen {
         }
         if (heroShip.getHp() > 0) {
             itemsPool.updateActiveSprites(delta);
-            itemsPool.update(delta);
+            itemsGenerator.generate(delta);
             heroShip.update(delta);
             enemyPool.updateActiveSprites(delta);
             enemyGenerator.generate(delta);

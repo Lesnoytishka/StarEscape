@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.sprites.Ships.HeroShip;
+import ru.lesnoytishka.game.utils.Rect;
 
 public class SupportItem extends Sprite {
 
@@ -12,14 +13,16 @@ public class SupportItem extends Sprite {
     private Vector2 followSpeed;
     private Vector2 followSpeedWihDelta;
     private Vector2 distanceToHeroShip;
+    protected Rect worldBounds;
     protected HeroShip heroShip;
 
-    public SupportItem(TextureAtlas atlas, String itemName, HeroShip heroShip) {
+    public SupportItem(TextureAtlas atlas, String itemName, Rect worldBounds, HeroShip heroShip) {
         super(atlas.findRegion(itemName));
         setHeightProportion(0.2f);
         followSpeed = new Vector2();
         followSpeedWihDelta = new Vector2();
         distanceToHeroShip = new Vector2();
+        this.worldBounds = worldBounds;
         this.heroShip = heroShip;
     }
 
