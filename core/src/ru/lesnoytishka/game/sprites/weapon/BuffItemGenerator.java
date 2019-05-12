@@ -10,7 +10,7 @@ public class BuffItemGenerator extends Sprite {
     private ItemsPool itemsPool;
     private Rect worldBounds;
 
-    private float generateInterval = Rnd.getFloat(1f, 3f);;
+    private float generateInterval = Rnd.getFloat(3f, 72f);;
     private float generateTimer;
 
     public BuffItemGenerator(ItemsPool itemsPool, Rect worldBounds) {
