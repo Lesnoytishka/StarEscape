@@ -9,10 +9,14 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.lesnoytishka.game.environment.MatrixUtils;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.MatrixUtils;
+import ru.lesnoytishka.game.utils.Rect;
 
 public abstract class BaseScreen implements Screen, InputProcessor {
+
+    protected enum PlayingStatus {PLAYING, PAUSE, GAME_OVER}
+
+    protected PlayingStatus playingStatus = PlayingStatus.PLAYING;
 
     protected SpriteBatch batch;
     protected Rect worldBounds;
@@ -21,8 +25,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     private Matrix4 worldToGl;
     private Matrix3 screenToWorld;
     private Vector2 touch;
-
-    protected boolean pause;
 
     @Override
     public void show() {
@@ -65,12 +67,12 @@ public abstract class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void pause() {
-        pause = true;
+        playingStatus = PlayingStatus.PAUSE;
     }
 
     @Override
     public void resume() {
-        pause = false;
+        playingStatus = PlayingStatus.PLAYING;
     }
 
     @Override
@@ -84,8 +86,8 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         batch.dispose();
     }
 
-    public boolean isPause() {
-        return pause;
+    public PlayingStatus isPause() {
+        return playingStatus;
     }
 
     //    -----------------------------------------------------------------------------

@@ -1,25 +1,24 @@
 package ru.lesnoytishka.game.pools;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import ru.lesnoytishka.game.base.Sprite;
 import ru.lesnoytishka.game.base.SpritesPool;
 import ru.lesnoytishka.game.sprites.weapon.Explosion;
 
-public class ExplosionPool extends SpritesPool {
+public class ExplosionPool extends SpritesPool<Explosion> {
 
-    TextureAtlas atlas;
-    Sound explosionSound;
+    private TextureAtlas atlas;
+    private Sound explosionSound;
 
-    public ExplosionPool(TextureAtlas atlas, Sound sound){
+    public ExplosionPool(TextureAtlas atlas){
         this.atlas = atlas;
-        this.explosionSound = sound;
+        explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
     }
 
     @Override
-    protected Sprite newObject() {
+    protected Explosion newObject() {
         return new Explosion(atlas, explosionSound);
-
     }
 }

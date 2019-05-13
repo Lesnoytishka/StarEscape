@@ -3,15 +3,12 @@ package ru.lesnoytishka.game.sprites.GameScreen;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.lesnoytishka.game.base.BackgroundsObject;
-import ru.lesnoytishka.game.environment.Rect;
-import ru.lesnoytishka.game.environment.Rnd;
+import ru.lesnoytishka.game.utils.Rect;
+import ru.lesnoytishka.game.utils.Rnd;
 
 public class BackgroundStars extends BackgroundsObject {
 
-    private int stepScale;
-    private boolean directionScaleUp = true;
-
-    public BackgroundStars(TextureAtlas atlas, String starName) {
+    BackgroundStars(TextureAtlas atlas, String starName) {
         super(atlas, starName);
     }
 
@@ -27,24 +24,7 @@ public class BackgroundStars extends BackgroundsObject {
     @Override
     public void update(float delta) {
         super.update(delta);
-        stepScale++;
-        if (stepScale < 80) {
-            if (directionScaleUp) {
-                scale += 0.01f;
-            } else {
-                scale -= 0.01f;
-            }
-        } else {
-            directionScaleUp = !directionScaleUp;
-            stepScale = 0;
-        }
-
-        position.mulAdd(speed, delta);
-        if (getLeft() > worldBounds.getRight()) setRight(worldBounds.getLeft());
-        if (getRight() < worldBounds.getLeft()) setLeft(worldBounds.getRight());
-        if (getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());
-        if (getBottom() > worldBounds.getTop()) setTop(worldBounds.getBottom());
-
+        checkBounds();
     }
 
 

@@ -7,18 +7,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.lesnoytishka.game.environment.Rect;
-import ru.lesnoytishka.game.environment.Regions;
+import ru.lesnoytishka.game.utils.Rect;
+import ru.lesnoytishka.game.utils.Regions;
 
 public class Sprite extends Rect {
 
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
-    protected TextureRegion animatedRegion;
+    private TextureRegion animatedRegion;
     protected int frame = 0;
-    protected Animation animation;
-    protected float stateTime;
+    private Animation animation;
+    private float stateTime;
 
     private boolean isDestroyed;
 

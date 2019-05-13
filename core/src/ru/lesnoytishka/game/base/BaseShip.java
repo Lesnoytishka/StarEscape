@@ -6,19 +6,20 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.pools.BulletPool;
 import ru.lesnoytishka.game.pools.ExplosionPool;
 import ru.lesnoytishka.game.sprites.weapon.Bullet;
+import ru.lesnoytishka.game.sprites.weapon.Explosion;
 
 public abstract class BaseShip extends Sprite {
 
     protected int hp = 10;
     protected float speedSheep = 0.2f;
-    protected float accelerationSpeedSheep = 0.4f;
     protected int weaponDamage;
     protected Vector2 speed = new Vector2(0, -speedSheep);
     protected Vector2 speedFight = new Vector2(0, -speedSheep);
+    protected Vector2 descentSpeed = new Vector2(0, -0.3f);
 
     protected float bulletHeight;
     protected Vector2 bulletSpeed;
@@ -26,7 +27,6 @@ public abstract class BaseShip extends Sprite {
 
     protected Rect worldBounds;
     protected ExplosionPool explosionPool;
-    protected TextureRegion explosionRegion;
     protected BulletPool bulletPool;
     protected TextureRegion bulletRegion;
 
@@ -36,20 +36,23 @@ public abstract class BaseShip extends Sprite {
     protected Sound soundShot;
     protected Sound soundExplosion;
 
-    public BaseShip(){}
+    public BaseShip(){
+        this.bulletSpeed = new Vector2();
+    }
 
-    public BaseShip(TextureAtlas atlas, String path, BulletPool bullets) {
+    public BaseShip(TextureAtlas atlas, String path, BulletPool bullets, ExplosionPool explosionPool) {
         super(atlas.findRegion(path));
-        setWeapon(atlas, bullets);
+        setWeapon(atlas, bullets, explosionPool);
         setSounds();
     }
 
-    protected void setWeapon(TextureAtlas atlas, BulletPool bullets) {
+    protected void setWeapon(TextureAtlas atlas, BulletPool bullets, ExplosionPool explosionPool) {
         weaponDamage = 10;
         bulletHeight = 0.05f;
         bulletPool = bullets;
         bulletRegion = atlas.findRegion("beams0");
         bulletSpeed = new Vector2(0, -0.6f);
+        this.explosionPool = explosionPool;
     }
 
     protected void setSounds() {
@@ -89,7 +92,7 @@ public abstract class BaseShip extends Sprite {
 
     protected void shoot() {
         Bullet bullet = (Bullet) bulletPool.obtain();
-        bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, bulletHeight, bulletPosition, worldBounds);
+        bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, bulletHeight, bulletPosition, worldBounds, explosionPool);
         soundShot.play(0.03f);
     }
 
@@ -109,6 +112,11 @@ public abstract class BaseShip extends Sprite {
         if (hp <= 0){
             destroy();
         }
+    }
+
+    public void detonation(){
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(this);
     }
 
     public int getHp() {

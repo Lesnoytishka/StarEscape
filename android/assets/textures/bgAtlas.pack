@@ -3,101 +3,188 @@ bgAtlas.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-enemyLightShip
+explosion7
   rotate: false
-  xy: 1, 1125
-  size: 750, 822
-  orig: 750, 822
+  xy: 1, 628
+  size: 1376, 1372
+  orig: 1376, 1372
   offset: 0, 0
   index: -1
 bgCloud
   rotate: false
-  xy: 1, 725
+  xy: 1, 228
   size: 409, 398
   orig: 409, 398
   offset: 0, 0
   index: -1
+GAME OVER
+  rotate: false
+  xy: 1379, 1842
+  size: 570, 158
+  orig: 570, 158
+  offset: 0, 0
+  index: -1
 bgStarBlue
   rotate: false
-  xy: 753, 1587
+  xy: 412, 266
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: -1
 bgStarRed
   rotate: false
-  xy: 1, 363
+  xy: 1379, 1480
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: -1
 bgStarWhite
   rotate: false
-  xy: 753, 1225
+  xy: 774, 266
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: -1
 bgStarYellow
   rotate: false
-  xy: 1115, 1587
+  xy: 1379, 1118
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: -1
 btnExit
   rotate: false
-  xy: 1, 1
+  xy: 1379, 756
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: -1
 btnPlay
   rotate: false
-  xy: 1115, 1225
+  xy: 1136, 266
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: -1
-enemy0
+NEW GAME
   rotate: false
-  xy: 412, 782
-  size: 325, 341
-  orig: 325, 341
+  xy: 1, 68
+  size: 519, 158
+  orig: 519, 158
   offset: 0, 0
   index: -1
-heroShip
+heroShipCriticalDamge
   rotate: false
-  xy: 1477, 1657
-  size: 237, 290
-  orig: 237, 290
+  xy: 1741, 1527
+  size: 257, 313
+  orig: 257, 313
+  offset: 0, 0
+  index: -1
+heroShipTakeDamge
+  rotate: false
+  xy: 1741, 1212
+  size: 257, 313
+  orig: 257, 313
+  offset: 0, 0
+  index: -1
+HeroShip
+  rotate: false
+  xy: 1741, 1037
+  size: 142, 173
+  orig: 142, 173
   offset: 0, 0
   index: -1
 beams0
   rotate: false
-  xy: 1477, 1470
+  xy: 1741, 850
   size: 99, 185
   orig: 99, 185
   offset: 0, 0
   index: -1
+hpBar
+  rotate: false
+  xy: 1379, 721
+  size: 249, 33
+  orig: 249, 33
+  offset: 0, 0
+  index: -1
 beams1
   rotate: false
-  xy: 1716, 1762
+  xy: 1885, 1025
   size: 97, 185
   orig: 97, 185
   offset: 0, 0
   index: -1
 bgStarZero
   rotate: false
-  xy: 1815, 1806
+  xy: 522, 123
   size: 141, 141
   orig: 141, 141
   offset: 0, 0
   index: -1
 bgStarGreen
   rotate: false
-  xy: 753, 1158
+  xy: 1, 1
   size: 65, 65
   orig: 65, 65
+  offset: 0, 0
+  index: -1
+
+bgAtlas2.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+enemyMedium2
+  rotate: false
+  xy: 1, 991
+  size: 753, 995
+  orig: 753, 995
+  offset: 0, 0
+  index: -1
+enemyLight1
+  rotate: false
+  xy: 1, 1
+  size: 700, 988
+  orig: 700, 988
+  offset: 0, 0
+  index: -1
+enemyLight2
+  rotate: false
+  xy: 703, 1
+  size: 700, 988
+  orig: 700, 988
+  offset: 0, 0
+  index: -1
+bulletAdd
+  rotate: false
+  xy: 756, 1161
+  size: 832, 825
+  orig: 832, 825
+  offset: 0, 0
+  index: -1
+
+bgAtlas3.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+enemyMedium1
+  rotate: false
+  xy: 1, 828
+  size: 689, 972
+  orig: 689, 972
+  offset: 0, 0
+  index: -1
+boomBigBada
+  rotate: false
+  xy: 692, 975
+  size: 825, 825
+  orig: 825, 825
+  offset: 0, 0
+  index: -1
+repairKit
+  rotate: false
+  xy: 1, 1
+  size: 825, 825
+  orig: 825, 825
   offset: 0, 0
   index: -1

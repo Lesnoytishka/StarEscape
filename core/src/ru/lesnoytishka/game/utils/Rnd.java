@@ -1,4 +1,4 @@
-package ru.lesnoytishka.game.environment;
+package ru.lesnoytishka.game.utils;
 
 import java.util.Random;
 

@@ -5,13 +5,16 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.lesnoytishka.game.base.BaseShip;
-import ru.lesnoytishka.game.environment.Rect;
+import ru.lesnoytishka.game.utils.Rect;
 import ru.lesnoytishka.game.pools.BulletPool;
+import ru.lesnoytishka.game.pools.ExplosionPool;
 import ru.lesnoytishka.game.sprites.weapon.Bullet;
 
 public class HeroShip extends BaseShip {
 
+    private final int baseMaxHP = 50;
     private float speedSheep = 0.4f;
+    private int maxHP = 50;
 
     private boolean isTouchOrder = false;
     private boolean isMoveUp = false;
@@ -29,23 +32,41 @@ public class HeroShip extends BaseShip {
     private Vector2 distanceToTouch;
     private Vector2 touch;
 
-    public HeroShip(TextureAtlas atlas, BulletPool bullets) {
-        super(atlas, "heroShip", bullets);
+    private int countBullet;
+    private Vector2 bulletPosition1;
+    private Vector2 bulletPosition2;
 
+    public HeroShip(TextureAtlas atlas, BulletPool bullets, ExplosionPool explosionPool, Rect worldBound) {
+        super(atlas, "HeroShip", bullets, explosionPool);
+        this.explosionPool = explosionPool;
         setMovedSpeed();
 
         speedToMoveWithDelta = new Vector2();
         distanceToTouch = new Vector2();
         touch = new Vector2();
-        this.hp = 50;
+        this.worldBounds = worldBound;
+        this.hp = maxHP;
+        countBullet = 1;
+        bulletPosition1 = new Vector2();
+        bulletPosition2 = new Vector2();
+    }
+
+    public void reset() {
+        flushDestroy();
+        hp = baseMaxHP;
+        maxHP = baseMaxHP;
+        setBottom(worldBounds.getBottom() + 0.05f);
+        disableButtonsMove();
     }
 
     @Override
-    protected void setWeapon(TextureAtlas atlas, BulletPool bullets) {
+    protected void setWeapon(TextureAtlas atlas, BulletPool bullets, ExplosionPool explosionPool) {
         bulletPool = bullets;
         bulletRegion = atlas.findRegion("beams1");
         bulletSpeed = new Vector2(0, 0.5f);
         reloadInterval = 0.2f;
+        weaponDamage = 1;
+        this.explosionPool = explosionPool;
     }
 
     private void setMovedSpeed() {
@@ -61,11 +82,23 @@ public class HeroShip extends BaseShip {
         shooting(delta);
         move(delta);
         returnToWorldArea();
+        if (countBullet > 3){
+            countBullet = 3;
+        }
     }
 
     @Override
     protected void shooting(float delta) {
-        bulletPosition = new Vector2(position.x, position.y + halfHeight);
+        if (countBullet == 1) {
+            bulletPosition = new Vector2(position.x, position.y + halfHeight);
+        } else if (countBullet == 2) {
+            bulletPosition = new Vector2(position.x - (halfWidth / 2) + 0.005f, position.y + halfHeight);
+            bulletPosition1 = new Vector2(position.x + (halfWidth / 2) - 0.005f, position.y + halfHeight);
+        } else if (countBullet == 3) {
+            bulletPosition = new Vector2(position.x, position.y + halfHeight);
+            bulletPosition1 = new Vector2(position.x - halfWidth + 0.01f, position.y + halfHeight - 0.015f);
+            bulletPosition2 = new Vector2(position.x + halfWidth - 0.01f, position.y + halfHeight - 0.015f);
+        }
         reloadTimer += delta;
         if (reloadTimer >= reloadInterval) {
             reloadTimer = 0f;
@@ -73,12 +106,32 @@ public class HeroShip extends BaseShip {
         }
     }
 
+    protected void shoot() {
+        if (countBullet == 1) {
+            Bullet bullet = (Bullet) bulletPool.obtain();
+            bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
+        } else if (countBullet == 2) {
+            Bullet bullet = (Bullet) bulletPool.obtain();
+            Bullet bullet1 = (Bullet) bulletPool.obtain();
+            bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
+            bullet1.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition1, worldBounds, explosionPool);
+        } else if (countBullet == 3) {
+            Bullet bullet = (Bullet) bulletPool.obtain();
+            Bullet bullet1 = (Bullet) bulletPool.obtain();
+            Bullet bullet2 = (Bullet) bulletPool.obtain();
+            bullet.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds, explosionPool);
+            bullet1.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition1, worldBounds, explosionPool);
+            bullet2.set(this, weaponDamage, bulletSpeed, bulletRegion, 0.05f, bulletPosition2, worldBounds, explosionPool);
+        }
+        soundShot.play(0.03f);
+    }
+
     private void returnToWorldArea() {
         if (getTop() > worldBounds.getTop()) {
             setTop(worldBounds.getTop());
         }
-        if (getBottom() < worldBounds.getBottom()) {
-            setBottom(worldBounds.getBottom());
+        if (getBottom() < worldBounds.getBottom() + 0.03f) {
+            setBottom(worldBounds.getBottom() + 0.03f);
         }
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
@@ -95,12 +148,6 @@ public class HeroShip extends BaseShip {
     }
 
 //    ----------------------------------------------------------------------------------------------
-
-    protected void shoot() {
-        Bullet bullet = (Bullet) bulletPool.obtain();
-        bullet.set(this, 15, bulletSpeed, bulletRegion, 0.05f, bulletPosition, worldBounds);
-        soundShot.play(0.03f);
-    }
 
     @Override
     protected void move(float delta) {
@@ -180,7 +227,6 @@ public class HeroShip extends BaseShip {
             case Input.Keys.SPACE:
                 shoot();
                 break;
-//                todo прекратить баловаться с читами....
             case Input.Keys.ALT_LEFT:
                 hp += 50;
                 break;
@@ -208,8 +254,34 @@ public class HeroShip extends BaseShip {
             case Input.Keys.RIGHT:
             case Input.Keys.D:
                 isMoveRight = false;
+                countBullet++;
                 break;
         }
         return false;
+    }
+
+    public int getMaxHP() {
+        return maxHP;
+    }
+
+    public void setMaxHP(int hp){
+        maxHP = hp;
+    }
+
+    public void setHP(int hp){
+        this.hp = hp;
+    }
+
+    public Vector2 getSpeed() {
+        return speedToMove;
+    }
+
+
+    public int getCountBullet() {
+        return countBullet;
+    }
+
+    public void setCountBullet(int countBullet) {
+        this.countBullet = countBullet;
     }
 }
