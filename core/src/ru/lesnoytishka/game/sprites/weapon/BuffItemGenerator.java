@@ -10,7 +10,7 @@ public class BuffItemGenerator extends Sprite {
     private ItemsPool itemsPool;
     private Rect worldBounds;
 
-    private float generateInterval = Rnd.getFloat(3f, 72f);;
+    private float generateInterval = Rnd.getFloat(3f, 4f);;
     private float generateTimer;
 
     public BuffItemGenerator(ItemsPool itemsPool, Rect worldBounds) {
@@ -29,8 +29,8 @@ public class BuffItemGenerator extends Sprite {
             } else {
                 buffItem.set(BuffItem.BuffType.BULLET_ADD);
             }
-            buffItem.position.set(Rnd.getFloat(worldBounds.getLeft(), worldBounds.getRight()),
-                    Rnd.getFloat(worldBounds.getBottom() + 0.035f, worldBounds.getTop()));
+            buffItem.position.set(Rnd.getFloat(worldBounds.getLeft() + halfWidth, worldBounds.getRight() - halfWidth),
+                    Rnd.getFloat(worldBounds.getBottom() + 0.035f + halfHeight, worldBounds.getTop() - halfHeight));
         }
     }
 }

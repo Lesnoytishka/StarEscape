@@ -5,44 +5,121 @@ filter: Linear,Linear
 repeat: none
 explosion7
   rotate: false
-  xy: 1, 655
+  xy: 1, 628
   size: 1376, 1372
   orig: 1376, 1372
   offset: 0, 0
   index: -1
 bgCloud
   rotate: false
-  xy: 1, 255
+  xy: 1, 228
   size: 409, 398
   orig: 409, 398
   offset: 0, 0
   index: -1
-bomb
+GAME OVER
   rotate: false
-  xy: 412, 186
-  size: 333, 467
-  orig: 333, 467
+  xy: 1379, 1842
+  size: 570, 158
+  orig: 570, 158
+  offset: 0, 0
+  index: -1
+bgStarBlue
+  rotate: false
+  xy: 412, 266
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+bgStarRed
+  rotate: false
+  xy: 1379, 1480
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+bgStarWhite
+  rotate: false
+  xy: 774, 266
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+bgStarYellow
+  rotate: false
+  xy: 1379, 1118
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+btnExit
+  rotate: false
+  xy: 1379, 756
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+btnPlay
+  rotate: false
+  xy: 1136, 266
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: -1
+NEW GAME
+  rotate: false
+  xy: 1, 68
+  size: 519, 158
+  orig: 519, 158
+  offset: 0, 0
+  index: -1
+heroShipCriticalDamge
+  rotate: false
+  xy: 1741, 1527
+  size: 257, 313
+  orig: 257, 313
+  offset: 0, 0
+  index: -1
+heroShipTakeDamge
+  rotate: false
+  xy: 1741, 1212
+  size: 257, 313
+  orig: 257, 313
+  offset: 0, 0
+  index: -1
+HeroShip
+  rotate: false
+  xy: 1741, 1037
+  size: 142, 173
+  orig: 142, 173
   offset: 0, 0
   index: -1
 beams0
   rotate: false
-  xy: 1, 68
+  xy: 1741, 850
   size: 99, 185
   orig: 99, 185
   offset: 0, 0
   index: -1
 hpBar
   rotate: false
-  xy: 102, 220
+  xy: 1379, 721
   size: 249, 33
   orig: 249, 33
   offset: 0, 0
   index: -1
 beams1
   rotate: false
-  xy: 102, 33
+  xy: 1885, 1025
   size: 97, 185
   orig: 97, 185
+  offset: 0, 0
+  index: -1
+bgStarZero
+  rotate: false
+  xy: 522, 123
+  size: 141, 141
+  orig: 141, 141
   offset: 0, 0
   index: -1
 bgStarGreen
@@ -50,90 +127,6 @@ bgStarGreen
   xy: 1, 1
   size: 65, 65
   orig: 65, 65
-  offset: 0, 0
-  index: -1
-HeroShip
-  rotate: false
-  xy: 201, 45
-  size: 142, 173
-  orig: 142, 173
-  offset: 0, 0
-  index: -1
-bgStarBlue
-  rotate: false
-  xy: 747, 293
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: -1
-bgStarRed
-  rotate: false
-  xy: 1109, 293
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: -1
-GAME OVER
-  rotate: false
-  xy: 747, 133
-  size: 570, 158
-  orig: 570, 158
-  offset: 0, 0
-  index: -1
-bgStarZero
-  rotate: false
-  xy: 345, 43
-  size: 141, 141
-  orig: 141, 141
-  offset: 0, 0
-  index: -1
-NEW GAME
-  rotate: false
-  xy: 1319, 133
-  size: 519, 158
-  orig: 519, 158
-  offset: 0, 0
-  index: -1
-bgStarWhite
-  rotate: false
-  xy: 1379, 1667
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: -1
-bgStarYellow
-  rotate: false
-  xy: 1379, 1305
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: -1
-btnExit
-  rotate: false
-  xy: 1379, 943
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: -1
-btnPlay
-  rotate: false
-  xy: 1471, 581
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: -1
-heroShipCriticalDamge
-  rotate: false
-  xy: 1741, 1714
-  size: 257, 313
-  orig: 257, 313
-  offset: 0, 0
-  index: -1
-heroShipTakeDamge
-  rotate: false
-  xy: 1741, 1399
-  size: 257, 313
-  orig: 257, 313
   offset: 0, 0
   index: -1
 
@@ -157,16 +150,16 @@ enemyLight1
   index: -1
 enemyLight2
   rotate: false
-  xy: 756, 998
+  xy: 703, 1
   size: 700, 988
   orig: 700, 988
   offset: 0, 0
   index: -1
-enemyMedium1
+bulletAdd
   rotate: false
-  xy: 703, 17
-  size: 689, 972
-  orig: 689, 972
+  xy: 756, 1161
+  size: 832, 825
+  orig: 832, 825
   offset: 0, 0
   index: -1
 
@@ -174,17 +167,24 @@ bgAtlas3.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-bulletAdd
+enemyMedium1
   rotate: false
-  xy: 1, 1
-  size: 810, 810
-  orig: 810, 810
+  xy: 1, 828
+  size: 689, 972
+  orig: 689, 972
+  offset: 0, 0
+  index: -1
+boomBigBada
+  rotate: false
+  xy: 692, 975
+  size: 825, 825
+  orig: 825, 825
   offset: 0, 0
   index: -1
 repairKit
   rotate: false
-  xy: 813, 1
-  size: 810, 810
-  orig: 810, 810
+  xy: 1, 1
+  size: 825, 825
+  orig: 825, 825
   offset: 0, 0
   index: -1
